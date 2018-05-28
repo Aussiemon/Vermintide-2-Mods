@@ -1,0 +1,12 @@
+mod =  [
+	"CreatureSpawner"
+]
+
+package = [
+	"resource_packages/CreatureSpawner/CreatureSpawner"
+]
+
+lua = [
+	"localization/*"
+	"scripts/mods/CreatureSpawner/*"
+]

@@ -1,0 +1,12 @@
+mod =  [
+	"SkipCutscenes"
+]
+
+package = [
+	"resource_packages/SkipCutscenes/SkipCutscenes"
+]
+
+lua = [
+	"localization/*"
+	"scripts/mods/SkipCutscenes/*"
+]
