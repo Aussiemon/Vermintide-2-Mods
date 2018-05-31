@@ -21,30 +21,6 @@ local mod = get_mod("SkipCutscenes")
 -- ##########################################################
 -- ################## Variables #############################
 
-local mod_data = {
-	name = "Skip Cutscenes",               -- Readable mod name
-	description = "Enable / disable the ability to skip cutscenes with ESC / Space.",  -- Mod description
-	is_togglable = true,            -- If the mod can be enabled/disabled
-	is_mutator = false,             -- If the mod is mutator
-	mutator_settings = {}          -- Extra settings, if it's mutator
-}
-
-mod_data.options_widgets = {
-	{
-		["setting_name"] = "automatic",
-		["widget_type"] = "dropdown",
-		["text"] = "Mode",
-		["tooltip"] = "Skip Cutscenes Mode\n" ..
-			"Toggle method of skipping cutscenes.\n\n" ..
-			"Automatic will skip cutscenes by default; Manual uses ESC / Space.",
-		["options"] = {
-			{text = "Automatic", value = true},
-			{text = "Manual", value = false}
-		},
-		["default_value"] = false,
-	}
-}
-
 -- Variable to track the need to skip the fade effect
 mod.skip_next_fade = false
 
@@ -160,7 +136,5 @@ end
 
 -- ##########################################################
 -- ################### Script ###############################
-
-mod:initialize_data(mod_data)
 
 -- ##########################################################
