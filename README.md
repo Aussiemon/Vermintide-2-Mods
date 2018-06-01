@@ -21,6 +21,6 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1391113873
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1391114686
 
-*Sound Event Monitor** mod (reports triggered sound event names and allows playing them back)
+**Sound Event Monitor** mod (reports triggered sound event names and allows playing them back)
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1399735793
