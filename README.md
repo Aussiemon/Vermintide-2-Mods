@@ -20,3 +20,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1391113873
 **Skip Cutscenes** mod (skip all cutscenes with space or escape)
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1391114686
+
+*Sound Event Monitor** mod (reports triggered sound event names and allows playing them back)
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=1399735793
