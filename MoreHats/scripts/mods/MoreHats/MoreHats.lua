@@ -13,7 +13,7 @@
  
 	-----
 	
-	Makes selected hats equippable by certain heroes, and unequippable by all heroes.
+	Lets all hats and frames be equippable and unequippable by compatible characters.
 --]]
 
 local mod = get_mod("MoreHats")
@@ -474,7 +474,28 @@ mod.players_nodes = {
 	}
 }
 
-mod.hats_patched = mod.hats_patched or false
+mod.every_career = {
+	"bw_adept",
+	"bw_scholar",
+	"bw_unchained",
+	
+	"we_waywatcher",
+	"we_maidenguard",
+	"we_shade",
+	
+	"dr_ranger",
+	"dr_ironbreaker",
+	"dr_slayer",
+	
+	"wh_captain",
+	"wh_bountyhunter",
+	"wh_zealot",
+	
+	"es_mercenary",
+	"es_huntsman",
+	"es_knight"
+}
+
 mod.active_career = ""
 
 -- Addon Globals --
@@ -505,10 +526,15 @@ local type = type
 -- ##########################################################
 -- ################## Functions #############################
 
-mod.get_all_hat_and_skin_nodes = function(self)
-	local list = {}
+-- Collect all hats and portrait frames for patching
+mod.get_all_hat_and_frames = function(self)
+	local item_list = {
+		hats = {},
+		frames = {}
+	}
 	
 	for item_name, item in pairs(ItemMasterList) do
+		-- Item is a hat. Collect the attachment nodes for later validation
 		if item.item_type == "hat" then
 			local hat_template = BackendUtils.get_item_template(item)
 			local attachment_node_linking = hat_template.attachment_node_linking
@@ -516,52 +542,69 @@ mod.get_all_hat_and_skin_nodes = function(self)
 			if attachment_node_linking and attachment_node_linking.slot_hat then
 				local slot_hat = attachment_node_linking.slot_hat
 				
-				list[item_name] = table.clone(slot_hat)
+				item_list.hats[item_name] = table.clone(slot_hat)
 			end
 			
-		-- @TODO: Implement MoreSkins
-		elseif item.item_type == "skin" then
+		-- Item is a frame. Store the name for later editing.
+		elseif item.item_type == "frame" then
+			table.insert(item_list.frames, item_name)
 		end
 	end
 	
-	return list
+	return item_list
 end
 
-mod.validate_hats = function(self, player_nodes, hat_nodes)
+-- Check if a hat is compatible for a certain character unit
+mod.validate_hats = function(self, character_nodes, hat_nodes)
 	for hat_name, node in pairs(hat_nodes) do
-		if player_nodes[node.source] == nil then
-			mod:echo("Unrecognized node. Please update the MoreHats mod.")
+	
+		-- Unknown nodes found (hats have been updated, and may be incompatible)
+		if character_nodes[node.source] == nil then
+			mod:echo("Hats have been updated. Unequip all mod hats and update the MoreHats mod, or risk crashes.")
 			return false
-		elseif player_nodes[node.source] == false then
+		
+		-- Hat is invalid for this character unit
+		elseif character_nodes[node.source] == false then
 			return false
 		end
 	end
 	
+	-- Hat is valid for this character unit
 	return true
 end
 
+-- Patch hats and frames to allow use with compatible characters
 mod.patch_hats = function(self, player_nodes)
+
 	mod:pcall(function()
-		local hats_nodes = mod:get_all_hat_and_skin_nodes()
+		local item_list = mod:get_all_hat_and_frames()
 		
-		for hat_name, hat_nodes in pairs(hats_nodes) do
-			local new_list = {}
+		-- Visit collected hats
+		local hat_nodes = item_list.hats
+		for item_name, item_nodes in pairs(hat_nodes) do
+			local new_can_wield_list = {}
 			
-			-- Find valid characters that can wear the hat
+			-- Find compatible characters and allow them to use the hat
 			for player_name, player_nodes in pairs(mod.players_nodes) do
-				if mod:validate_hats(player_nodes, hat_nodes) then
-					table.insert(new_list, player_name)
+				if mod:validate_hats(player_nodes, item_nodes) then
+					table.insert(new_can_wield_list, player_name)
 				end
 			end
 			
-			-- Patch the master item list with new list
-			if #new_list > 0 then
-				ItemMasterList[hat_name].can_wield = new_list
+			-- Patch the master item list with new list of compatible characters
+			if #new_can_wield_list > 0 then
+				ItemMasterList[item_name].can_wield = new_can_wield_list
 			end
 		end
 		
-		-- Hats are all patched
-		mod.hats_patched = true
+		-- Visit collected frames
+		local frames = item_list.frames
+		for _, item_name in pairs(frames) do
+		
+			-- Allow all characters to use the portrait frame
+			local new_can_wield_list = mod.every_career
+			ItemMasterList[item_name].can_wield = new_can_wield_list
+		end
 	end)
 end
 
