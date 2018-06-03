@@ -21,6 +21,33 @@ local mod = get_mod("MoreHats")
 -- ##########################################################
 -- ################## Variables #############################
 
+mod.every_career = {
+	-- Bright Wizard
+	"bw_adept",
+	"bw_scholar",
+	"bw_unchained",
+	
+	-- Wood Elf
+	"we_waywatcher",
+	"we_maidenguard",
+	"we_shade",
+	
+	-- Dwarf Ranger
+	"dr_ranger",
+	"dr_ironbreaker",
+	"dr_slayer",
+	
+	-- Witch Hunter
+	"wh_captain",
+	"wh_bountyhunter",
+	"wh_zealot",
+	
+	-- Empire Soldier
+	"es_mercenary",
+	"es_huntsman",
+	"es_knight"
+}
+
 mod.players_nodes = {
 	bw_adept = {
 		j_upperlipleft2_anim = true,
@@ -474,42 +501,6 @@ mod.players_nodes = {
 	}
 }
 
-mod.every_career = {
-	"bw_adept",
-	"bw_scholar",
-	"bw_unchained",
-	
-	"we_waywatcher",
-	"we_maidenguard",
-	"we_shade",
-	
-	"dr_ranger",
-	"dr_ironbreaker",
-	"dr_slayer",
-	
-	"wh_captain",
-	"wh_bountyhunter",
-	"wh_zealot",
-	
-	"es_mercenary",
-	"es_huntsman",
-	"es_knight"
-}
-
-mod.active_career = ""
-
--- Addon Globals --
-MORE_HATS_ADDONS = MORE_HATS_ADDONS or {
-	configs = {},
-	transformations = {}
-}
-
-local addons = MORE_HATS_ADDONS
-local configs = addons.configs
-local transformations = addons.transformations
-local attachment_linkings = AttachmentNodeLinking
--- ----------------
-
 local ItemMasterList = ItemMasterList
 local AttachmentUtils = AttachmentUtils
 local BackendUtils = BackendUtils
@@ -558,10 +549,9 @@ end
 mod.validate_hats = function(self, character_nodes, hat_nodes)
 	for hat_name, node in pairs(hat_nodes) do
 	
-		-- Unknown nodes found (hats have been updated, and may be incompatible)
+		-- Unknown nodes found (hats have been updated and may be incompatible)
 		if character_nodes[node.source] == nil then
-			mod:echo("Hats have been updated. Unequip all mod hats and update the MoreHats mod, or risk crashes.")
-			return false
+			return nil
 		
 		-- Hat is invalid for this character unit
 		elseif character_nodes[node.source] == false then
@@ -573,51 +563,70 @@ mod.validate_hats = function(self, character_nodes, hat_nodes)
 	return true
 end
 
--- Patch hats and frames to allow use with compatible characters
-mod.patch_hats = function(self, player_nodes)
+-- Allow compatible characters to wield compatible hats
+mod.patch_hats = function(self, hat_nodes)
+	for item_name, item_nodes in pairs(hat_nodes) do
+		local new_can_wield_list = {}
+		
+		-- Find compatible characters and allow them to use the hat
+		for player_name, player_nodes in pairs(mod.players_nodes) do
+			local hat_validation = mod:validate_hats(player_nodes, item_nodes)
+			if hat_validation then
+				table.insert(new_can_wield_list, player_name)
+			elseif hat_validation == nil then
+				mod:echo("New hat types have been added. Unequipping all hats for safety. Please update the MoreHats mod, or risk crashes.")
+				mod:unequip_all_hats()
+				return
+			end
+		end
+		
+		-- Patch the master item list with the new list of compatible characters
+		if #new_can_wield_list > 0 then
+			ItemMasterList[item_name].can_wield = new_can_wield_list
+		end
+	end
+end
+
+-- Allow compatible characters to wield compatible portrait frames
+mod.patch_frames = function(self, frame_list)
+	for _, item_name in pairs(frame_list) do
+		local new_can_wield_list = mod.every_career
+		ItemMasterList[item_name].can_wield = new_can_wield_list
+	end
+end
+
+-- Patch cosmetics to allow use with compatible characters
+mod.patch_cosmetics = function(self)
 
 	mod:pcall(function()
 		local item_list = mod:get_all_hat_and_frames()
 		
 		-- Visit collected hats
 		local hat_nodes = item_list.hats
-		for item_name, item_nodes in pairs(hat_nodes) do
-			local new_can_wield_list = {}
-			
-			-- Find compatible characters and allow them to use the hat
-			for player_name, player_nodes in pairs(mod.players_nodes) do
-				if mod:validate_hats(player_nodes, item_nodes) then
-					table.insert(new_can_wield_list, player_name)
-				end
-			end
-			
-			-- Patch the master item list with new list of compatible characters
-			if #new_can_wield_list > 0 then
-				ItemMasterList[item_name].can_wield = new_can_wield_list
-			end
-		end
+		mod:patch_hats(hat_nodes)
 		
 		-- Visit collected frames
-		local frames = item_list.frames
-		for _, item_name in pairs(frames) do
-		
-			-- Allow all characters to use the portrait frame
-			local new_can_wield_list = mod.every_career
-			ItemMasterList[item_name].can_wield = new_can_wield_list
-		end
+		local frame_list = item_list.frames
+		mod:patch_frames(frame_list)
 	end)
 end
 
-mod.get_index = function(self, list, index)
-	return list[index]
+-- Unequip all hats for all characters
+mod.unequip_all_hats = function(self)
+	mod:pcall(function()
+		for i = 1, #(mod.every_career) do
+			local backend_items = Managers.backend:get_interface("items")
+			backend_items:set_loadout_item(nil, mod.every_career[i], "slot_hat")
+		end
+	end)
 end
 
 -- ##########################################################
 -- #################### Hooks ###############################
 
--- ---------------------------------
--- Allow unequipping hats --
--- ---------------------------------
+-- ------------------------------------
+-- Allow unequipping hats and frames --
+-- ------------------------------------
 
 mod:hook("HeroWindowCosmeticsInventory._handle_input", function (func, self, ...)
 	-- Original function
@@ -632,7 +641,8 @@ mod:hook("HeroWindowCosmeticsInventory._handle_input", function (func, self, ...
 		local item_data = item.data
 		local slot_type = item_data.slot_type
 		
-		if slot_type == "hat" then
+		-- Unequip selected cosmetic
+		if slot_type == "hat" or slot_type == "frame" then
 			item = {
 				data = {
 					slot_type = slot_type
@@ -641,9 +651,9 @@ mod:hook("HeroWindowCosmeticsInventory._handle_input", function (func, self, ...
 			
 			local parent = self.parent
 			parent:_set_loadout_item(item)
-			self:_play_sound("play_gui_equipment_equip_hero")
-			
 			parent:update_skin_sync()
+			
+			self:_play_sound("play_gui_equipment_equip_hero")
 		end
 	end
 end)
@@ -658,99 +668,36 @@ mod:hook("PlayerUnitAttachmentExtension.create_attachment_in_slot", function (fu
 	return func(self, slot_name, backend_id, ...)
 end)
 
+-- Return early if item_name is nil
+mod:hook("ItemHelper.get_template_by_item_name", function (func, item_name, ...)
+	if not item_name then
+		return {}
+	end
+	
+	-- Original function
+	return func(item_name, ...)
+end)
+
+-- Set default frame_name if nil
+mod:hook("CosmeticSystem.set_equipped_frame", function (func, self, unit, frame_name, ...)
+	if not frame_name then
+		frame_name = "default"
+	end
+	
+	-- Original function
+	return func(self, unit, frame_name, ...)
+end)
+
 -- ------------------------------------------
 -- Support hats with invalid attachment links
 -- ------------------------------------------
 
--- Modify template return value while creating attachment
-mod:hook("BackendUtils.get_item_template", function (func, item_data, ...)
-	-- Original function
-	local item_template = func(item_data, ...)
-	
-	if item_data and item_template then
-		local name = item_data.name
-		
-		-- Replace with mod profile
-		if configs[name] and mod:get_index(configs[name], mod.active_career) then
-			local new_attachment_name = mod:get_index(configs[name], mod.active_career).attachment_node_linking or ""
-			local new_attachment = attachment_linkings[new_attachment_name]
-			if new_attachment then
-				mod.backup_node_linking = table.clone(item_template.attachment_node_linking)
-				mod.backup_node_linking_ref = item_template.attachment_node_linking
-				item_template.attachment_node_linking = new_attachment
-			end
-		end
-	end
-	
-	return item_template
-end)
-mod:hook_disable("BackendUtils.get_item_template")
-
--- Modify template return value while creating attachment
-mod:hook("ItemHelper.get_template_by_item_name", function (func, item_name, ...)
-	-- Original function
-	local item_template = func(item_name, ...)
-	
-	if item_name and item_template then
-		local name = item_name
-		
-		-- Replace with mod profile
-		if configs[name] and mod:get_index(configs[name], mod.active_career) then
-			local new_attachment_name = mod:get_index(configs[name], mod.active_career).attachment_node_linking or ""
-			local new_attachment = attachment_linkings[new_attachment_name]
-			if new_attachment then
-				mod.backup_node_linking = table.clone(item_template.attachment_node_linking)
-				mod.backup_node_linking_ref = item_template.attachment_node_linking
-				item_template.attachment_node_linking = new_attachment
-			end
-		end
-	end
-	
-	return item_template
-end)
-mod:hook_disable("ItemHelper.get_template_by_item_name")
-
--- Modify attachment linking in item template
-mod:hook("AttachmentUtils.create_attachment", function (func, world, owner_unit, attachments, slot_name, ...)
-	local slot_data
-	if slot_name == "slot_hat" then
-		mod:hook_enable("BackendUtils.get_item_template")
-		if not ScriptUnit.has_extension(owner_unit, "career_system") then
-			mod:hook_disable("BackendUtils.get_item_template")
-		else
-			local career_ext = ScriptUnit.extension(owner_unit, "career_system")
-			local career_name = career_ext:career_name()
-			mod.active_career = career_name
-		end
-		slot_data = func(world, owner_unit, attachments, slot_name, ...)
-		mod:hook_disable("BackendUtils.get_item_template")
-		
-		if mod.backup_node_linking_ref and mod.backup_node_linking then
-			mod.backup_node_linking_ref = mod.backup_node_linking
-		end
-	else
-		slot_data = func(world, owner_unit, attachments, slot_name, ...)
-	end
-	return slot_data
-end)
-
--- Modify attachment linking in item template
-mod:hook("MenuWorldPreviewer.equip_item", function (func, self, item_name, slot, ...)
-	local result
-	if slot.type == "hat" then
-		mod:hook_enable("ItemHelper.get_template_by_item_name")
-		mod.active_career = self._current_career_name
-		result = func(self, item_name, slot, ...)
-		mod:hook_disable("ItemHelper.get_template_by_item_name")
-		
-		if mod.backup_node_linking_ref and mod.backup_node_linking then
-			mod.backup_node_linking_ref = mod.backup_node_linking
-		end
-	else
-		result = func(self, item_name, slot, ...)
-	end
-	return result
-end)
+--[[
+"BackendUtils.get_item_template"
+"ItemHelper.get_template_by_item_name"
+"AttachmentUtils.create_attachment"
+"MenuWorldPreviewer.equip_item"
+--]]
 
 -- ---------------------------------
 -- Prevent crashes
@@ -773,7 +720,8 @@ mod:hook("GearUtils.link_units", function (func, world, attachment_node_linking,
 				source_node_index = Unit.node(source, source_node)
 				last_source_index = source_node_index
 			elseif type(source_node) == "string" and not Unit.has_node(source, source_node) then
-				mod:echo("A character has an invalid headgear equipped. Unequip broken hats and update the MoreHats mod.")
+				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
+				mod:unequip_all_hats()
 				break
 			end
 			
@@ -784,7 +732,9 @@ mod:hook("GearUtils.link_units", function (func, world, attachment_node_linking,
 				target_node_index = Unit.node(target, target_node)
 				last_target_index = target_node_index
 			elseif type(target_node) == "string" and not Unit.has_node(target, target_node) then
-				mod:echo("A character has an invalid headgear equipped. Unequip broken hats and update the MoreHats mod.")
+				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
+				mod:unequip_all_hats()
+				break
 			end
 			
 			link_table[#link_table + 1] = {
@@ -817,7 +767,8 @@ mod:hook("AttachmentUtils.link", function (func, world, source, target, node_lin
 				source_node_index = Unit.node(source, source_node)
 				last_source_index = source_node_index
 			elseif type(source_node) == "string" and not Unit.has_node(source, source_node) then
-				mod:echo("A character has an invalid headgear equipped. Unequip broken hats and update the MoreHats mod.")
+				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
+				mod:unequip_all_hats()
 				break
 			end
 			
@@ -828,7 +779,8 @@ mod:hook("AttachmentUtils.link", function (func, world, source, target, node_lin
 				target_node_index = Unit.node(target, target_node)
 				last_target_index = target_node_index
 			elseif type(target_node) == "string" and not Unit.has_node(target, target_node) then
-				mod:echo("A character has an invalid headgear equipped. Unequip broken hats and update the MoreHats mod.")
+				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
+				mod:unequip_all_hats()
 				break
 			end
 
@@ -844,7 +796,7 @@ end)
 mod.on_game_state_changed = function(status, state)
 	if state == "StateLoading" and status == "exit" then
 		if mod:is_enabled() then
-			mod:patch_hats()
+			mod:patch_cosmetics()
 		end
 	end
 end
@@ -857,11 +809,9 @@ end
 -- Call when governing settings checkbox is checked
 mod.on_enabled = function(initial_call)
 	mod:enable_all_hooks()
-	mod:hook_disable("BackendUtils.get_item_template")
-	mod:hook_disable("ItemHelper.get_template_by_item_name")
 	
 	if not initial_call then
-		mod:patch_hats()
+		mod:patch_cosmetics()
 	end
 end
 
