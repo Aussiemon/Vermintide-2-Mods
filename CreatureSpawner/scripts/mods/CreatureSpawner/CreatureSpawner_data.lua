@@ -188,8 +188,7 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["setting_name"] = "selected_unit",
 		["widget_type"] = "dropdown",
 		["text"] = "Selected Unit",
-		["tooltip"] = "Selected Unit\n" ..
-			"Allows choosing the unit selected for spawning.",
+		["tooltip"] = "Allows choosing the unit selected for spawning.",
 		["options"] = {
 			{text = "chaos_berzerker", value = "chaos_berzerker"},
 			{text = "chaos_corruptor_sorcerer", value = "chaos_corruptor_sorcerer"},
@@ -249,8 +248,7 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["setting_name"] = "unit_list",
 		["widget_type"] = "dropdown",
 		["text"] = "Available Unit List",
-		["tooltip"] = "Available Unit List\n" ..
-			"Allows choosing which units are available to spawn.\n\n" ..
+		["tooltip"] = "Allows choosing which units are available to spawn.\n\n" ..
 			"-- REGULAR --\nAll 'normal' unit types.\n\n" ..
 			"-- DUMMY --\nDummy units without AI.\n\n" ..
 			"-- SPECIAL --\nOnly regular pingable units.\n\n" ..
@@ -268,30 +266,34 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 	{
 		["setting_name"] = "creature_spawner_spawn_keybind",
 		["widget_type"] = "keybind",
+		["type"] = "pressed",
 		["text"] = "Keybind: Spawn Unit",
 		["tooltip"] = "Choose the keybinding that spawns a unit.",
-		["default_value"] = {"f5"},
+		["default_value"] = {},
 		["action"] = "handle_spawn_unit"
 	},
 	{
 		["setting_name"] = "creature_spawner_next_keybind",
 		["widget_type"] = "keybind",
+		["type"] = "pressed",
 		["text"] = "Keybind: Next Unit",
 		["tooltip"] = "Choose the keybinding that selects the next unit.",
-		["default_value"] = {"f6"},
+		["default_value"] = {},
 		["action"] = "handle_next_unit"
 	},
 	{
 		["setting_name"] = "creature_spawner_prev_keybind",
 		["widget_type"] = "keybind",
+		["type"] = "pressed",
 		["text"] = "Keybind: Previous Unit",
 		["tooltip"] = "Choose the keybinding that selects the previous unit.",
-		["default_value"] = {"f7"},
+		["default_value"] = {},
 		["action"] = "handle_previous_unit"
 	},
 	{
 		["setting_name"] = "creature_spawner_destroy_keybind",
 		["widget_type"] = "keybind",
+		["type"] = "pressed",
 		["text"] = "Keybind: Destroy All Units",
 		["tooltip"] = "Choose the keybinding that destroys all units.",
 		["default_value"] = {},
@@ -301,8 +303,7 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["setting_name"] = "enable_keep_ai",
 		["widget_type"] = "checkbox",
 		["text"] = "Enable AI in Keep",
-		["tooltip"] = "Enable AI in Keep\n" ..
-					"[THIS SETTING MAY RESULT IN CRASHES]" ..
+		["tooltip"] = "[THIS SETTING MAY RESULT IN CRASHES]\n" ..
 					"Toggle AI perception and pathfinding in the Keep on / off",
 		["default_value"] = false -- Default first option is enabled. In this case true
 	}

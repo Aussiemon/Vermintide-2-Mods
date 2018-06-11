@@ -23,7 +23,9 @@ local mod = get_mod("CreatureSpawner")
 
 mod.breed_name_index = mod.breed_name_index or 1
 
+local AISystem = AISystem
 local Breeds = Breeds
+local ConflictDirector = ConflictDirector
 local Managers = Managers
 local Unit = Unit
 local Vector3Box = Vector3Box
@@ -242,7 +244,7 @@ end
 -- CONFLICT DIRECTOR HOOKS --
 
 -- Create raycasts for queued debug units
-mod:hook("ConflictDirector.update_spawn_queue", function(func, self, ...)
+mod:hook(ConflictDirector, "update_spawn_queue", function(func, self, ...)
 
 	-- Perform delayed raycast if necessary
 	if self.spawn_queue_size > 0 then
@@ -265,7 +267,7 @@ mod:hook("ConflictDirector.update_spawn_queue", function(func, self, ...)
 end)
 
 -- Allow spawns in the keep
-mod:hook("ConflictDirector.update", function (func, self, dt, t, ...)
+mod:hook(ConflictDirector, "update", function (func, self, dt, t, ...)
 
 	if not mod:check_for_inn_or_loading() then
 		return func(self, dt, t, ...)
@@ -303,7 +305,7 @@ mod:hook("ConflictDirector.update", function (func, self, dt, t, ...)
 end)
 
 -- Enable or disable brains in the keep
-mod:hook("AISystem.update_brains", function (func, ...)
+mod:hook(AISystem, "update_brains", function (func, ...)
 
 	if not mod:check_for_inn_or_loading() then
 		return func(...)
@@ -338,14 +340,8 @@ mod.on_setting_changed = function(setting_name)
 	end
 end
 
--- Call when governing settings checkbox is unchecked
-mod.on_disabled = function(initial_call)
-	mod:disable_all_hooks()
-end
-
 -- Call when governing settings checkbox is checked
 mod.on_enabled = function(initial_call)
-	mod:enable_all_hooks()
 	if initial_call then
 		mod:set("selected_unit", mod:get("unit_list")[1], false)
 	end

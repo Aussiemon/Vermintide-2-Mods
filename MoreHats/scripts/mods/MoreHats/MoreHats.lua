@@ -509,6 +509,12 @@ local ScriptUnit = ScriptUnit
 local World = World
 local Matrix4x4Box = Matrix4x4Box
 
+local CosmeticSystem = CosmeticSystem
+local GearUtils = GearUtils
+local HeroWindowCosmeticsInventory = HeroWindowCosmeticsInventory
+local ItemHelper = ItemHelper
+local PlayerUnitAttachmentExtension = PlayerUnitAttachmentExtension
+
 local ipairs = ipairs
 local pairs = pairs
 local table = table
@@ -628,7 +634,7 @@ end
 -- Allow unequipping hats and frames --
 -- ------------------------------------
 
-mod:hook("HeroWindowCosmeticsInventory._handle_input", function (func, self, ...)
+mod:hook(HeroWindowCosmeticsInventory, "_handle_input", function (func, self, ...)
 	-- Original function
 	func(self, ...)
 	
@@ -659,7 +665,7 @@ mod:hook("HeroWindowCosmeticsInventory._handle_input", function (func, self, ...
 end)
 
 -- Return early if backend id is nil
-mod:hook("PlayerUnitAttachmentExtension.create_attachment_in_slot", function (func, self, slot_name, backend_id, ...)
+mod:hook(PlayerUnitAttachmentExtension, "create_attachment_in_slot", function (func, self, slot_name, backend_id, ...)
 	if not backend_id then
 		return
 	end
@@ -669,7 +675,7 @@ mod:hook("PlayerUnitAttachmentExtension.create_attachment_in_slot", function (fu
 end)
 
 -- Return early if item_name is nil
-mod:hook("ItemHelper.get_template_by_item_name", function (func, item_name, ...)
+mod:hook(ItemHelper, "get_template_by_item_name", function (func, item_name, ...)
 	if not item_name then
 		return {}
 	end
@@ -679,7 +685,7 @@ mod:hook("ItemHelper.get_template_by_item_name", function (func, item_name, ...)
 end)
 
 -- Set default frame_name if nil
-mod:hook("CosmeticSystem.set_equipped_frame", function (func, self, unit, frame_name, ...)
+mod:hook(CosmeticSystem, "set_equipped_frame", function (func, self, unit, frame_name, ...)
 	if not frame_name then
 		frame_name = "default"
 	end
@@ -704,7 +710,7 @@ end)
 -- ---------------------------------
 
 -- Prevent attachment crash when a node is missing (a_hat, j_spine2, j_shoulderlevel)
-mod:hook("GearUtils.link_units", function (func, world, attachment_node_linking, link_table, source, target, ...)
+mod:hook(GearUtils, "link_units", function (func, world, attachment_node_linking, link_table, source, target, ...)
 	local last_source_index = 0
 	local last_target_index = 0
 	
@@ -751,7 +757,7 @@ end)
 
 
 -- Prevent attachment crash when a node is missing (a_hat, j_spine2, j_shoulderlevel)
-mod:hook("AttachmentUtils.link", function (func, world, source, target, node_linking, ...)
+mod:hook(AttachmentUtils, "link", function (func, world, source, target, node_linking, ...)
 	local last_source_index = 0
 	local last_target_index = 0
 	
@@ -801,15 +807,8 @@ mod.on_game_state_changed = function(status, state)
 	end
 end
 
--- Call when governing settings checkbox is unchecked
-mod.on_disabled = function(initial_call)
-	mod:disable_all_hooks()
-end
-
 -- Call when governing settings checkbox is checked
 mod.on_enabled = function(initial_call)
-	mod:enable_all_hooks()
-	
 	if not initial_call then
 		mod:patch_cosmetics()
 	end
