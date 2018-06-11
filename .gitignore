@@ -1,14 +1,14 @@
+**/*.bak
+**/*.bat
+**/*.jpeg
+**/*.jpg
+**/*.old
+**/*.pdn
+**/*.png
+**/*.vscode
+**/SDK Modding Tools.lnk
 storage/
 .temp/
 **/bundleV2/
 **/bundleV1/
 **/screenshots/
-SDK Modding Tools.lnk
-*.bak
-*.bat
-*.jpeg
-*.jpg
-*.old
-*.pdn
-*.png
-*.vscode
