@@ -21,6 +21,10 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1391113873
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1391114686
 
+**Potion Dialogue** mod (plays unused relevant character voicelines when drinking potions)
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=1409485499
+
 **Sound Event Monitor** mod (reports triggered sound event names and allows playing them back)
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1399735793
