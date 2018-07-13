@@ -533,10 +533,14 @@ mod:hook(Utility, "get_action_utility", function (func, breed_action, action_nam
 			local input = consideration.blackboard_input
 			local blackboard_value = blackboard_action_data[input] or blackboard[input]
 			if not blackboard_value then
-				if blackboard_action_data[input] then
-					blackboard_action_data[input] = math.random()
-				else
-					blackboard[input] = math.random()
+				blackboard_action_data = {
+					last_time = -math.huge,
+					time_since_last = math.huge,
+					last_done_time = -math.huge,
+					time_since_last_done = math.huge
+				}
+				if not blackboard_action_data[input] then
+					blackboard_action_data[input] = -math.huge
 				end
 			end
 		until true
