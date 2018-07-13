@@ -1,0 +1,11 @@
+mod = [
+	"Krenchmanglr"
+]
+
+package = [
+	"resource_packages/Krenchmanglr/Krenchmanglr"
+]
+
+lua = [
+	"scripts/mods/Krenchmanglr/*"
+]

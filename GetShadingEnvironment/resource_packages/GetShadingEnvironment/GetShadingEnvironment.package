@@ -1,0 +1,11 @@
+mod = [
+	"GetShadingEnvironment"
+]
+
+package = [
+	"resource_packages/GetShadingEnvironment/GetShadingEnvironment"
+]
+
+lua = [
+	"scripts/mods/GetShadingEnvironment/*"
+]

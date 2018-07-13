@@ -14,165 +14,201 @@
 
 local mod = get_mod("CreatureSpawner")
 
-mod.regular_units = {
-	"chaos_berzerker",
-	"chaos_corruptor_sorcerer",
-	--"chaos_dummy_sorcerer",
-	--"chaos_dummy_troll",
-	--"chaos_exalted_champion_norsca",
-	--"chaos_exalted_champion_warcamp",
-	--"chaos_exalted_sorcerer",
-	"chaos_fanatic",
-	"chaos_marauder",
-	--"chaos_marauder_tutorial",
-	"chaos_marauder_with_shield",
-	"chaos_plague_sorcerer",
-	--"chaos_plague_wave_spawner",
-	"chaos_raider",
-	--"chaos_raider_tutorial",
-	"chaos_spawn",
-	--"chaos_spawn_exalted_champion_norsca",
-	--"chaos_tentacle",
-	"chaos_tentacle_sorcerer",
-	"chaos_troll",
-	"chaos_vortex",
-	"chaos_vortex_sorcerer",
-	"chaos_warrior",
-	--"chaos_zombie",
-	"critter_pig",
-	"critter_rat",
-	--"pet_pig",
-	--"pet_rat",
-	"skaven_clan_rat",
-	--"skaven_clan_rat_tutorial",
-	"skaven_clan_rat_with_shield",
-	--"skaven_dummy_clan_rat",
-	--"skaven_dummy_slave",
-	--"skaven_grey_seer",
-	"skaven_gutter_runner",
-	"skaven_loot_rat",
-	"skaven_pack_master",
-	"skaven_plague_monk",
-	"skaven_poison_wind_globadier",
-	"skaven_rat_ogre",
-	"skaven_ratling_gunner",
-	"skaven_slave",
-	"skaven_storm_vermin",
-	--"skaven_storm_vermin_champion",
-	"skaven_storm_vermin_commander",
-	--"skaven_storm_vermin_warlord",
-	"skaven_storm_vermin_with_shield",
-	"skaven_stormfiend",
-	--"skaven_stormfiend_boss",
-	--"skaven_stormfiend_demo",
-	"skaven_warpfire_thrower"
+mod.regular_units = {}
+mod.dummy_units = {}
+mod.misc_units = {}
+mod.special_units = {}
+mod.boss_units = {}
+mod.all_units = {}
+
+mod.unit_category_names = {
+	"regular",
+	"dummy",
+	"misc",
+	"special",
+	"boss",
+	"all"
 }
 
-mod.dummy_units = {
-	"chaos_dummy_sorcerer",
-	"chaos_dummy_troll",
-	"skaven_dummy_clan_rat",
-	"skaven_dummy_slave",
-}
-
-mod.special_units = {
-	"chaos_berzerker",
-	"chaos_corruptor_sorcerer",
-	"chaos_exalted_champion_norsca",
-	"chaos_exalted_champion_warcamp",
-	"chaos_exalted_sorcerer",
-	"chaos_plague_sorcerer",
-	"chaos_raider",
-	"chaos_spawn",
-	"chaos_spawn_exalted_champion_norsca",
-	"chaos_tentacle_sorcerer",
-	"chaos_troll",
-	"chaos_vortex_sorcerer",
-	"chaos_warrior",
-	"skaven_grey_seer",
-	"skaven_gutter_runner",
-	"skaven_loot_rat",
-	"skaven_pack_master",
-	"skaven_plague_monk",
-	"skaven_poison_wind_globadier",
-	"skaven_rat_ogre",
-	"skaven_ratling_gunner",
-	"skaven_storm_vermin",
-	"skaven_storm_vermin_champion",
-	"skaven_storm_vermin_commander",
-	"skaven_storm_vermin_warlord",
-	"skaven_storm_vermin_with_shield",
-	"skaven_stormfiend",
-	"skaven_stormfiend_boss",
-	"skaven_warpfire_thrower"
-}
-
-mod.boss_units = {
-	"chaos_exalted_champion_norsca",
-	"chaos_exalted_champion_warcamp",
-	"chaos_exalted_sorcerer",
-	"chaos_spawn",
-	"chaos_spawn_exalted_champion_norsca",
-	"chaos_troll",
-	"skaven_grey_seer",
-	"skaven_rat_ogre",
-	"skaven_storm_vermin_warlord",
-	"skaven_stormfiend",
-	"skaven_stormfiend_boss",
-}
-
-mod.all_units = {
-	"chaos_berzerker",
-	"chaos_corruptor_sorcerer",
-	"chaos_dummy_sorcerer",
-	"chaos_dummy_troll",
-	"chaos_exalted_champion_norsca",
-	"chaos_exalted_champion_warcamp",
-	"chaos_exalted_sorcerer",
-	"chaos_fanatic",
-	"chaos_marauder",
-	"chaos_marauder_tutorial",
-	"chaos_marauder_with_shield",
-	"chaos_plague_sorcerer",
-	"chaos_plague_wave_spawner",
-	"chaos_raider",
-	"chaos_raider_tutorial",
-	"chaos_spawn",
-	"chaos_spawn_exalted_champion_norsca",
-	"chaos_tentacle",
-	"chaos_tentacle_sorcerer",
-	"chaos_troll",
-	"chaos_vortex",
-	"chaos_vortex_sorcerer",
-	"chaos_warrior",
-	"chaos_zombie",
-	"critter_pig",
-	"critter_rat",
-	"pet_pig",
-	"pet_rat",
-	"skaven_clan_rat",
-	"skaven_clan_rat_tutorial",
-	"skaven_clan_rat_with_shield",
-	"skaven_dummy_clan_rat",
-	"skaven_dummy_slave",
-	"skaven_grey_seer",
-	"skaven_gutter_runner",
-	"skaven_loot_rat",
-	"skaven_pack_master",
-	"skaven_plague_monk",
-	"skaven_poison_wind_globadier",
-	"skaven_rat_ogre",
-	"skaven_ratling_gunner",
-	"skaven_slave",
-	"skaven_storm_vermin",
-	"skaven_storm_vermin_champion",
-	"skaven_storm_vermin_commander",
-	"skaven_storm_vermin_warlord",
-	"skaven_storm_vermin_with_shield",
-	"skaven_stormfiend",
-	"skaven_stormfiend_boss",
-	"skaven_stormfiend_demo",
-	"skaven_warpfire_thrower"
+mod.unit_categories = {
+	chaos_berzerker = {
+		"regular",
+		"special",
+	},
+	chaos_corruptor_sorcerer = {
+		"regular",
+		"special",
+	},
+	chaos_dummy_sorcerer = {
+		"dummy",
+		"misc",
+	},
+	chaos_dummy_troll = {
+		"dummy",
+		"misc",
+	},
+	chaos_exalted_champion_norsca = {
+		"boss",
+	},
+	chaos_exalted_champion_warcamp = {
+		"boss",
+	},
+	chaos_exalted_sorcerer = {
+		"boss",
+	},
+	chaos_fanatic = {
+		"regular",
+	},
+	chaos_marauder = {
+		"regular",
+	},
+	chaos_marauder_tutorial = {
+		"misc",
+	},
+	chaos_marauder_with_shield = {
+		"regular",
+	},
+	chaos_plague_sorcerer = {
+		"misc",
+	},
+	chaos_plague_wave_spawner = {
+		"misc",
+	},
+	chaos_raider = {
+		"regular",
+		"special",
+	},
+	chaos_raider_tutorial = {
+		"misc",
+	},
+	chaos_spawn = {
+		"regular",
+		"boss",
+	},
+	chaos_spawn_exalted_champion_norsca = {
+		"boss",
+	},
+	chaos_tentacle = {
+		"misc",
+	},
+	chaos_tentacle_sorcerer = {
+		"misc",
+	},
+	chaos_troll = {
+		"regular",
+		"boss",
+	},
+	chaos_vortex = {
+		"misc",
+	},
+	chaos_vortex_sorcerer = {
+		"regular",
+		"special",
+	},
+	chaos_warrior = {
+		"regular",
+		"special",
+	},
+	chaos_zombie = {
+		"misc",
+	},
+	critter_pig = {
+		"regular",
+	},
+	critter_rat = {
+		"regular",
+	},
+	pet_pig = {
+		"misc",
+	},
+	pet_rat = {
+		"misc",
+	},
+	skaven_clan_rat = {
+		"regular",
+	},
+	skaven_clan_rat_tutorial = {
+		"misc",
+	},
+	skaven_clan_rat_with_shield = {
+		"regular",
+	},
+	skaven_dummy_clan_rat = {
+		"dummy",
+		"misc",
+	},
+	skaven_dummy_slave = {
+		"dummy",
+		"misc",
+	},
+	skaven_grey_seer = {
+		"boss",
+	},
+	skaven_gutter_runner = {
+		"regular",
+		"special",
+	},
+	skaven_loot_rat = {
+		"regular",
+		"special",
+	},
+	skaven_pack_master = {
+		"regular",
+		"special",
+	},
+	skaven_plague_monk = {
+		"regular",
+		"special",
+	},
+	skaven_poison_wind_globadier = {
+		"regular",
+		"special",
+	},
+	skaven_rat_ogre = {
+		"regular",
+		"boss",
+	},
+	skaven_ratling_gunner = {
+		"regular",
+		"special",
+	},
+	skaven_slave = {
+		"regular",
+	},
+	skaven_storm_vermin = {
+		"regular",
+		"special",
+	},
+	skaven_storm_vermin_champion = {
+		"misc",
+		"boss",
+	},
+	skaven_storm_vermin_commander = {
+		"regular",
+		"special",
+	},
+	skaven_storm_vermin_warlord = {
+		"boss",
+	},
+	skaven_storm_vermin_with_shield = {
+		"regular",
+		"special",
+	},
+	skaven_stormfiend = {
+		"regular",
+		"boss",
+	},
+	skaven_stormfiend_boss = {
+		"boss",
+	},
+	skaven_stormfiend_demo = {
+		"misc",
+		"boss",
+	},
+	skaven_warpfire_thrower = {
+		"regular",
+		"special",
+	}
 }
 
 local mod_data = {
@@ -184,87 +220,40 @@ local mod_data = {
 }
 
 mod_data.options_widgets = { -- Widget settings for the mod options menu
-	{
-		["setting_name"] = "selected_unit",
-		["widget_type"] = "dropdown",
-		["text"] = "Selected Unit",
-		["tooltip"] = "Allows choosing the unit selected for spawning.",
-		["options"] = {
-			{text = "chaos_berzerker", value = "chaos_berzerker"},
-			{text = "chaos_corruptor_sorcerer", value = "chaos_corruptor_sorcerer"},
-			{text = "chaos_dummy_sorcerer", value = "chaos_dummy_sorcerer"},
-			{text = "chaos_dummy_troll", value = "chaos_dummy_troll"},
-			{text = "chaos_exalted_champion_norsca", value = "chaos_exalted_champion_norsca"},
-			{text = "chaos_exalted_champion_warcamp", value = "chaos_exalted_champion_warcamp"},
-			{text = "chaos_exalted_sorcerer", value = "chaos_exalted_sorcerer"},
-			{text = "chaos_fanatic", value = "chaos_fanatic"},
-			{text = "chaos_marauder", value = "chaos_marauder"},
-			{text = "chaos_marauder_tutorial", value = "chaos_marauder_tutorial"},
-			{text = "chaos_marauder_with_shield", value = "chaos_marauder_with_shield"},
-			{text = "chaos_plague_sorcerer", value = "chaos_plague_sorcerer"},
-			{text = "chaos_plague_wave_spawner", value = "chaos_plague_wave_spawner"},
-			{text = "chaos_raider", value = "chaos_raider"},
-			{text = "chaos_raider_tutorial", value = "chaos_raider_tutorial"},
-			{text = "chaos_spawn", value = "chaos_spawn"},
-			{text = "chaos_spawn_exalted_champion_norsca", value = "chaos_spawn_exalted_champion_norsca"},
-			{text = "chaos_tentacle", value = "chaos_tentacle"},
-			{text = "chaos_tentacle_sorcerer", value = "chaos_tentacle_sorcerer"},
-			{text = "chaos_troll", value = "chaos_troll"},
-			{text = "chaos_vortex", value = "chaos_vortex"},
-			{text = "chaos_vortex_sorcerer", value = "chaos_vortex_sorcerer"},
-			{text = "chaos_warrior", value = "chaos_warrior"},
-			{text = "chaos_zombie", value = "chaos_zombie"},
-			{text = "critter_pig", value = "critter_pig"},
-			{text = "critter_rat", value = "critter_rat"},
-			{text = "pet_pig", value = "pet_pig"},
-			{text = "pet_rat", value = "pet_rat"},
-			{text = "skaven_clan_rat", value = "skaven_clan_rat"},
-			{text = "skaven_clan_rat_tutorial", value = "skaven_clan_rat_tutorial"},
-			{text = "skaven_clan_rat_with_shield", value = "skaven_clan_rat_with_shield"},
-			{text = "skaven_dummy_clan_rat", value = "skaven_dummy_clan_rat"},
-			{text = "skaven_dummy_slave", value = "skaven_dummy_slave"},
-			{text = "skaven_grey_seer", value = "skaven_grey_seer"},
-			{text = "skaven_gutter_runner", value = "skaven_gutter_runner"},
-			{text = "skaven_loot_rat", value = "skaven_loot_rat"},
-			{text = "skaven_pack_master", value = "skaven_pack_master"},
-			{text = "skaven_plague_monk", value = "skaven_plague_monk"},
-			{text = "skaven_poison_wind_globadier", value = "skaven_poison_wind_globadier"},
-			{text = "skaven_rat_ogre", value = "skaven_rat_ogre"},
-			{text = "skaven_ratling_gunner", value = "skaven_ratling_gunner"},
-			{text = "skaven_slave", value = "skaven_slave"},
-			{text = "skaven_storm_vermin", value = "skaven_storm_vermin"},
-			{text = "skaven_storm_vermin_champion", value = "skaven_storm_vermin_champion"},
-			{text = "skaven_storm_vermin_commander", value = "skaven_storm_vermin_commander"},
-			{text = "skaven_storm_vermin_warlord", value = "skaven_storm_vermin_warlord"},
-			{text = "skaven_storm_vermin_with_shield", value = "skaven_storm_vermin_with_shield"},
-			{text = "skaven_stormfiend", value = "skaven_stormfiend"},
-			{text = "skaven_stormfiend_boss", value = "skaven_stormfiend_boss"},
-			{text = "skaven_stormfiend_demo", value = "skaven_stormfiend_demo"},
-			{text = "skaven_warpfire_thrower", value = "skaven_warpfire_thrower"},
-		},
-		["default_value"] = "skaven_dummy_slave", -- Default first option is enabled. In this case mod.regular_units
-	},
-	{
-		["setting_name"] = "unit_list",
+	-- { -- Selected spawning unit
+		-- ["setting_name"] = "cs_selected_unit",
+		-- ["widget_type"] = "dropdown",
+		-- ["text"] = "Selected Unit",
+		-- ["tooltip"] = "This unit is selected for spawning.",
+		-- ["options"] = {
+			-- {text = "", value = ""},
+		-- },
+		-- ["default_value"] = "skaven_dummy_slave",
+	-- },
+	{ -- Selected list of available spawn units
+		["setting_name"] = "cs_unit_list",
 		["widget_type"] = "dropdown",
 		["text"] = "Available Unit List",
 		["tooltip"] = "Allows choosing which units are available to spawn.\n\n" ..
 			"-- REGULAR --\nAll 'normal' unit types.\n\n" ..
 			"-- DUMMY --\nDummy units without AI.\n\n" ..
+			"-- MISC --\nUnused, unstable, or debug units.\n\n" ..
 			"-- SPECIAL --\nOnly regular pingable units.\n\n" ..
 			"-- BOSS --\nAll bosses and minibosses.\n\n" ..
 			"-- ALL --\nAll known units.",
 		["options"] = {
-			{text = "Regular", value = mod.regular_units},
-			{text = "Dummy", value = mod.dummy_units},
-			{text = "Special", value = mod.special_units},
-			{text = "Boss", value = mod.boss_units},
-			{text = "All", value = mod.all_units},
+			{text = "Regular", value = "regular_units"},
+			{text = "Dummy", value = "dummy_units"},
+			{text = "Misc", value = "misc_units"},
+			{text = "Special", value = "special_units"},
+			{text = "Boss", value = "boss_units"},
+			{text = "All", value = "all_units"},
 		},
-		["default_value"] = mod.regular_units, -- Default first option is enabled. In this case mod.regular_units
+		["default_value"] = "regular_units", -- Default first option is enabled. In this case mod.regular_units
 	},
-	{
-		["setting_name"] = "creature_spawner_spawn_keybind",
+	
+	{ -- Keybind for spawning units
+		["setting_name"] = "cs_spawn_keybind",
 		["widget_type"] = "keybind",
 		["type"] = "pressed",
 		["text"] = "Keybind: Spawn Unit",
@@ -272,8 +261,8 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["default_value"] = {},
 		["action"] = "handle_spawn_unit"
 	},
-	{
-		["setting_name"] = "creature_spawner_next_keybind",
+	{ -- Keybind to move to next unit in list
+		["setting_name"] = "cs_next_keybind",
 		["widget_type"] = "keybind",
 		["type"] = "pressed",
 		["text"] = "Keybind: Next Unit",
@@ -281,8 +270,8 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["default_value"] = {},
 		["action"] = "handle_next_unit"
 	},
-	{
-		["setting_name"] = "creature_spawner_prev_keybind",
+	{ -- Keybind to move to previous unit in list
+		["setting_name"] = "cs_prev_keybind",
 		["widget_type"] = "keybind",
 		["type"] = "pressed",
 		["text"] = "Keybind: Previous Unit",
@@ -290,8 +279,8 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["default_value"] = {},
 		["action"] = "handle_previous_unit"
 	},
-	{
-		["setting_name"] = "creature_spawner_destroy_keybind",
+	{ -- Keybind to destroy all spawned units
+		["setting_name"] = "cs_destroy_keybind",
 		["widget_type"] = "keybind",
 		["type"] = "pressed",
 		["text"] = "Keybind: Destroy All Units",
@@ -299,11 +288,79 @@ mod_data.options_widgets = { -- Widget settings for the mod options menu
 		["default_value"] = {},
 		["action"] = "handle_despawn_units"
 	},
-	{
-		["setting_name"] = "enable_keep_ai",
+	
+	-- { -- First slot of saved units
+		-- ["setting_name"] = "cs_saved_unit_one",
+		-- ["widget_type"] = "dropdown",
+		-- ["text"] = "Saved Unit One",
+		-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
+		-- ["options"] = {
+			-- {text = "", value = ""},
+		-- },
+		-- ["default_value"] = "",
+	-- },
+	{ -- Keybind to spawn first saved unit
+		["setting_name"] = "cs_spawn_saved_unit_one_keybind",
+		["widget_type"] = "keybind",
+		["type"] = "pressed",
+		["text"] = "Keybind: Spawn Saved Unit One",
+		["tooltip"] = "Choose the keybinding that spawns the first saved unit.",
+		["default_value"] = {},
+		["action"] = "handle_spawn_unit_one"
+	},
+	
+	-- { -- Second slot of saved units
+		-- ["setting_name"] = "cs_saved_unit_two",
+		-- ["widget_type"] = "dropdown",
+		-- ["text"] = "Saved Unit Two",
+		-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
+		-- ["options"] = {
+			-- {text = "", value = ""},
+		-- },
+		-- ["default_value"] = "",
+	-- },
+	{ -- Keybind to spawn second saved unit
+		["setting_name"] = "cs_spawn_saved_unit_two_keybind",
+		["widget_type"] = "keybind",
+		["type"] = "pressed",
+		["text"] = "Keybind: Spawn Saved Unit Two",
+		["tooltip"] = "Choose the keybinding that spawns the second saved unit.",
+		["default_value"] = {},
+		["action"] = "handle_spawn_unit_two"
+	},
+	
+	-- { -- Third slot of saved units
+		-- ["setting_name"] = "cs_saved_unit_three",
+		-- ["widget_type"] = "dropdown",
+		-- ["text"] = "Saved Unit Three",
+		-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
+		-- ["options"] = {
+			-- {text = "", value = ""},
+		-- },
+		-- ["default_value"] = "",
+	-- },
+	{ -- Keybind to spawn third saved unit
+		["setting_name"] = "cs_spawn_saved_unit_three_keybind",
+		["widget_type"] = "keybind",
+		["type"] = "pressed",
+		["text"] = "Keybind: Spawn Saved Unit Three",
+		["tooltip"] = "Choose the keybinding that spawns the third saved unit.",
+		["default_value"] = {},
+		["action"] = "handle_spawn_unit_three"
+	},
+	
+	{ -- Toggle AI in missions
+		["setting_name"] = "cs_enable_mission_ai",
+		["widget_type"] = "checkbox",
+		["text"] = "Enable AI in Missions",
+		["tooltip"] = "Toggle AI perception and pathfinding in missions on / off",
+		["default_value"] = true -- Default first option is enabled. In this case true
+	},
+	{ -- Toggle AI in Keep
+		["setting_name"] = "cs_enable_keep_ai",
 		["widget_type"] = "checkbox",
 		["text"] = "Enable AI in Keep",
-		["tooltip"] = "[THIS SETTING MAY RESULT IN CRASHES]\n" ..
+		["tooltip"] = "[ENABLING THIS SETTING MAY RESULT IN CRASHES]\n" ..
 					"Toggle AI perception and pathfinding in the Keep on / off",
 		["default_value"] = false -- Default first option is enabled. In this case true
 	}

@@ -1,0 +1,11 @@
+mod = [
+	"BetterCartPhysics"
+]
+
+package = [
+	"resource_packages/BetterCartPhysics/BetterCartPhysics"
+]
+
+lua = [
+	"scripts/mods/BetterCartPhysics/*"
+]
