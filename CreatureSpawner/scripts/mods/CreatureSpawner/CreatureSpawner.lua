@@ -507,8 +507,7 @@ end)
 -- Enable or disable AI brains by mod setting
 mod:hook(AISystem, "update_brains", function (func, ...)
 	if not mod:is_in_keep() then
-		return mod:get("cs_enable_mission_ai") and func(...)
-		
+		return mod:get("cs_enable_mission_ai") and func(...)	
 	else
 		return mod:get("cs_enable_keep_ai") and func(...)
 	end
@@ -558,7 +557,7 @@ end)
 
 -- Prevent Spinemanglr summon crash #2
 mod:hook(BTSpawnAllies, "enter", function (func, self, unit, blackboard, ...)
-	if not mod:is_in_keep() and (blackboard.override_spawn_allies_call_position or blackboard.has_call_position) then
+	if not mod:is_in_keep() and (blackboard.has_call_position or blackboard.override_spawn_allies_call_position) then
 		return func(self, unit, blackboard, ...)
 	end
 	
@@ -570,18 +569,30 @@ mod:hook(BTSpawnAllies, "enter", function (func, self, unit, blackboard, ...)
 		local data = {
 			end_time = math.huge
 		}
-		blackboard.spawning_allies = data
+		blackboard.spawning_allies = blackboard.spawning_allies or data
 		
 		local call_position = BTSpawnAllies.find_spawn_point(unit, blackboard, action, data)
 		if call_position then
 			return func(self, unit, blackboard, ...)
 		else
-			data.end_time = -1
+			blackboard.spawning_allies = nil
 		end
+	else
+		return func(self, unit, blackboard, ...)
 	end
 end)
 
 -- Prevent Spinemanglr summon crash #3
+mod:hook(BTSpawnAllies, "run", function (func, self, unit, blackboard, ...)
+	return (not mod:is_in_keep() and blackboard.spawning_allies and func(self, unit, blackboard, ...)) or "done"
+end)
+
+-- Prevent Spinemanglr summon crash #4
+mod:hook(BTSpawnAllies, "leave", function (func, self, unit, blackboard, ...)
+	return (not mod:is_in_keep() and blackboard.action and func(self, unit, blackboard, ...))
+end)
+
+-- Prevent Spinemanglr summon crash #5
 mod:hook(BTSpawnAllies, "find_spawn_point", function (func, unit, blackboard, action, data, override_spawn_group, ...)
 	local spawn_group = override_spawn_group or action.optional_go_to_spawn or action.spawn_group
 	local spawner_system = Managers.state.entity:system("spawner_system")
