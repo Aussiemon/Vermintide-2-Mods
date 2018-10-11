@@ -38,6 +38,7 @@ local Quaternion = Quaternion
 local QuaternionBox = QuaternionBox
 local ScriptUnit = ScriptUnit
 local SpecialsPacing = SpecialsPacing
+local script_data = script_data
 local Unit = Unit
 local Vector3Box = Vector3Box
 local World = World
@@ -48,6 +49,7 @@ local BTSpawnAllies = BTSpawnAllies
 local EnemyPackageLoader = EnemyPackageLoader
 local EnemyPackageLoaderSettings = EnemyPackageLoaderSettings
 local NavigationGroupManager = NavigationGroupManager
+local StateIngame = StateIngame
 local TerrorEventMixer = TerrorEventMixer
 local Utility = Utility
 
@@ -502,6 +504,15 @@ mod:hook(ConflictDirector, "update", function (func, self, dt, t, ...)
 	self._time = t
 
 	self:update_spawn_queue(t)
+end)
+
+-- Fix for breed optimizations, courtesy of prop_joe
+mod:hook(StateIngame, "update", function(func, self, dt, main_t, ...)
+    local game_mode_key = Managers.state.game_mode:game_mode_key()
+
+    script_data.disable_breed_freeze_opt = game_mode_key == "inn"
+
+    return func(self, dt, main_t, ...)
 end)
 
 -- Enable or disable AI brains by mod setting
