@@ -23,6 +23,7 @@ local mod_data = {
 }
 
 mod.profanity_list = {
+	"[dD][aA][mM][nN]",
 	"[wW][hH][oO][rR][eE]",
 	"[wW][eE][tT][bB][aA][cC][kK]",
 	"[tT][rR][yY][hH][aA][rR][dD]",
