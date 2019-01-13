@@ -2,4 +2,4 @@
 Author: Aussiemon
 Version: 1.0
 
-Description: 
+Description: This mod censors common profanity in lobby messages.
