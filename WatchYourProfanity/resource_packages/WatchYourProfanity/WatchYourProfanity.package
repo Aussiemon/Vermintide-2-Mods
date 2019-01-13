@@ -1,0 +1,11 @@
+mod = [
+	"WatchYourProfanity"
+]
+
+package = [
+	"resource_packages/WatchYourProfanity/WatchYourProfanity"
+]
+
+lua = [
+	"scripts/mods/WatchYourProfanity/*"
+]
