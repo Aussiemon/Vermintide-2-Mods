@@ -36,3 +36,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1422758813
 **Watch Your Profanity** mod (censors common profanity in lobby messages)
 
 https://steamcommunity.com/sharedfiles/filedetails/?id=1607336227
+
+**Hi-Def UI Scaling** mod (better UI scaling for higher-resolution QHD+ displays)
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=1623948024
