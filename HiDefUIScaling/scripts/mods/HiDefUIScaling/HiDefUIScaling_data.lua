@@ -12,6 +12,7 @@ return {
 				default_value = 400,
 				options = {
 					localize = false,
+					{text = "100%", value = 100}, -- 1080p
 					{text = "133%", value = 133}, -- 1440p
 					{text = "166%", value = 166},
 					{text = "200%", value = 200}, -- 4k

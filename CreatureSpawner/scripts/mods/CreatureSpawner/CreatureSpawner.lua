@@ -3,7 +3,7 @@
 	
 	-----
  
-	Copyright 2018 Aussiemon
+	Copyright 2019 Aussiemon
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -33,6 +33,7 @@ local Breeds = Breeds
 local ConflictDirector = ConflictDirector
 local HordeSpawner = HordeSpawner
 local Managers = Managers
+local POSITION_LOOKUP = POSITION_LOOKUP
 local PhysicsWorld = PhysicsWorld
 local Quaternion = Quaternion
 local QuaternionBox = QuaternionBox
@@ -43,6 +44,7 @@ local Unit = Unit
 local Vector3Box = Vector3Box
 local World = World
 
+local AiBreedSnippets = AiBreedSnippets
 local BTEnterHooks = BTEnterHooks
 local BTLootRatFleeAction = BTLootRatFleeAction
 local BTSpawnAllies = BTSpawnAllies
@@ -55,6 +57,7 @@ local Utility = Utility
 
 local math = math
 local pairs = pairs
+local pcall = pcall
 local table = table
 local tostring = tostring
 local type = type
@@ -507,12 +510,8 @@ mod:hook(ConflictDirector, "update", function (func, self, dt, t, ...)
 end)
 
 -- Fix for breed optimizations, courtesy of prop_joe
-mod:hook(StateIngame, "update", function(func, self, dt, main_t, ...)
-    local game_mode_key = Managers.state.game_mode:game_mode_key()
-
-    script_data.disable_breed_freeze_opt = game_mode_key == "inn"
-
-    return func(self, dt, main_t, ...)
+mod:hook_safe(StateIngame, "update", function(...)
+    script_data.disable_breed_freeze_opt = mod:is_in_keep()
 end)
 
 -- Enable or disable AI brains by mod setting
@@ -524,42 +523,13 @@ mod:hook(AISystem, "update_brains", function (func, ...)
 	end
 end)
 
--- PREVENT UNIT CRASHES (AKA I hope you like defensive coding) --
-
--- Prevent missing blackboard value crash
-mod:hook(Utility, "get_action_utility", function (func, breed_action, action_name, blackboard, ...)
-	local blackboard_action_data = blackboard.utility_actions[action_name]
-	local considerations = breed_action.considerations
-
-	-- Instantiate blackboard values
-	for name, consideration in pairs(considerations) do
-		repeat
-			local is_table = type(consideration) == "table"
-
-			if not is_table then
-				break
-			end
-
-			local input = consideration.blackboard_input
-			local blackboard_value = blackboard_action_data[input] or blackboard[input]
-			if not blackboard_value then
-				blackboard_action_data = {
-					last_time = -math.huge,
-					time_since_last = math.huge,
-					last_done_time = -math.huge,
-					time_since_last_done = math.huge
-				}
-				if not blackboard_action_data[input] then
-					blackboard_action_data[input] = -math.huge
-				end
-			end
-		until true
-	end
-	
-	-- Original function
-	return func(breed_action, action_name, blackboard, ...)
+-- Prevent boss loot die exception on despawn
+mod:hook(AiBreedSnippets, "reward_boss_kill_loot_die", function (func, unit, ...)
+	local position = POSITION_LOOKUP[unit]
+	return pcall(function() return position.z end) and func(unit, ...)
 end)
 
+-- PREVENT UNIT CRASHES (AKA I hope you like defensive coding) --
 
 -- Prevent Spinemanglr summon crash #1
 mod:hook(BTEnterHooks, "warlord_defensive_on_enter", function (func, unit, blackboard, ...)
@@ -618,18 +588,6 @@ mod:hook(BTSpawnAllies, "find_spawn_point", function (func, unit, blackboard, ac
 end)
 
 -- Prevent keep navigation crash
-mod:hook(NavigationGroupManager, "a_star_cached_between_positions", function (func, ...)
-	return (not mod:is_in_keep() and func(...)) or false
-end)
-
--- Prevent keep navigation crash
-mod:hook(Unit, "create_actor", function (func, self, id, ...)
-	if not mod:is_in_keep() or id ~= -1 then
-		return func(self, id, ...)
-	end
-end)
-
--- Prevent keep navigation crash
 mod:hook(BTLootRatFleeAction, "enter", function (func, ...)
 	return (not mod:is_in_keep() and func(...)) or false
 end)
@@ -642,6 +600,52 @@ end)
 -- Prevent keep navigation crash
 mod:hook(BTLootRatFleeAction, "leave", function (func, ...)
 	return (not mod:is_in_keep() and func(...)) or false
+end)
+
+-- Prevent keep navigation crash
+mod:hook(NavigationGroupManager, "a_star_cached_between_positions", function (func, ...)
+	return (not mod:is_in_keep() and func(...)) or false
+end)
+
+-- Prevent keep navigation crash
+mod:hook(Unit, "create_actor", function (func, self, id, ...)
+	if not mod:is_in_keep() or id ~= -1 then
+		return func(self, id, ...)
+	end
+end)
+
+-- Prevent missing blackboard value crash
+mod:hook(Utility, "get_action_utility", function (func, breed_action, action_name, blackboard, ...)
+	local blackboard_action_data = blackboard.utility_actions[action_name]
+	local considerations = breed_action.considerations
+
+	-- Instantiate blackboard values
+	for name, consideration in pairs(considerations) do
+		repeat
+			local is_table = type(consideration) == "table"
+
+			if not is_table then
+				break
+			end
+
+			local input = consideration.blackboard_input
+			local blackboard_value = blackboard_action_data[input] or blackboard[input]
+			if not blackboard_value then
+				blackboard_action_data = {
+					last_time = -math.huge,
+					time_since_last = math.huge,
+					last_done_time = -math.huge,
+					time_since_last_done = math.huge
+				}
+				if not blackboard_action_data[input] then
+					blackboard_action_data[input] = -math.huge
+				end
+			end
+		until true
+	end
+	
+	-- Original function
+	return func(breed_action, action_name, blackboard, ...)
 end)
 
 -- UNIT PACKAGE HOOKS --
