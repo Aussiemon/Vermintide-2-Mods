@@ -1,5 +1,5 @@
 
 Author: Aussiemon
-Version: 1.0
+Version: 1.1
 
-Description: Provides better UI scaling for higher-resolution QHD+ displays.
+Description: Provides fine-tuned control over global UI scaling.

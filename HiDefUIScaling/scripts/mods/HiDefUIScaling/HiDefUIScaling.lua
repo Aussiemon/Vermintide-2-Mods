@@ -13,7 +13,7 @@
 
 	-----
 
-	Provides better UI scaling for higher-resolution displays.
+	Provides fine-tuned control over global UI scaling.
 --]]
 
 local mod = get_mod("HiDefUIScaling")
@@ -21,7 +21,7 @@ local mod = get_mod("HiDefUIScaling")
 -- ##########################################################
 -- ################## Variables #############################
 
-local scale = mod:get("scale")
+local scale = mod:get("scale_slider")
 
 local AccomodateViewport = AccomodateViewport
 local Application = Application
@@ -41,9 +41,9 @@ mod.UIResolutionScale = function (self, width, height)
 	local width_scale, height_scale
 	
 	if width > UIResolutionWidthFragments() and height > UIResolutionHeightFragments() then
-		local max_scaling_factor = math.max((((scale or 4) + 1) / 100), 1)
+		local max_scaling_factor = scale or 4.00
 
-		-- Changed to allow scaling up to quadruple the original max scale (1 -> 4)
+		-- Changed to allow scaling up to quadruple the original max scale (0.5 -> 4)
 		width_scale = math.min(width / UIResolutionWidthFragments(), max_scaling_factor)
 		height_scale = math.min(height / UIResolutionHeightFragments(), max_scaling_factor)
 	else
@@ -91,7 +91,7 @@ end)
 
 mod.on_setting_changed = function ()
 	-- There's only one setting for this mod, so don't check for changed setting_id
-	scale = mod:get("scale")
+	scale = mod:get("scale_slider")
 	UPDATE_RESOLUTION_LOOKUP(true)
 end
 
