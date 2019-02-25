@@ -39,17 +39,11 @@ local math = math
 
 mod.UIResolutionScale = function (self, width, height)
 	local width_scale, height_scale
-	
-	if width > UIResolutionWidthFragments() and height > UIResolutionHeightFragments() then
-		local max_scaling_factor = scale or 4.00
+	local max_scaling_factor = scale or 4.00
 
-		-- Changed to allow scaling up to quadruple the original max scale (0.5 -> 4)
-		width_scale = math.min(width / UIResolutionWidthFragments(), max_scaling_factor)
-		height_scale = math.min(height / UIResolutionHeightFragments(), max_scaling_factor)
-	else
-		width_scale = w / UIResolutionWidthFragments()
-		height_scale = h / UIResolutionHeightFragments()
-	end
+	-- Changed to allow scaling up to quadruple the original max scale (0.5 -> 4)
+	width_scale = math.min(width / UIResolutionWidthFragments(), max_scaling_factor)
+	height_scale = math.min(height / UIResolutionHeightFragments(), max_scaling_factor)
 	
 	return math.min(width_scale, height_scale)
 end
