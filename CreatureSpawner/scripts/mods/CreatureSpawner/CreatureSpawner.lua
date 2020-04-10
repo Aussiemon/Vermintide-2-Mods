@@ -31,7 +31,9 @@ local Actor = Actor
 local Application = Application
 local Breeds = Breeds
 local ConflictDirector = ConflictDirector
+local GwNavQueries = GwNavQueries
 local HordeSpawner = HordeSpawner
+local LocomotionUtils = LocomotionUtils
 local Managers = Managers
 local POSITION_LOOKUP = POSITION_LOOKUP
 local PhysicsWorld = PhysicsWorld
@@ -175,6 +177,18 @@ mod.spawn_debug_breed_at_cursor = function(self)
 			return
 		end
 		
+		-- Disable AI in the keep if the breed is blacklisted
+		local ai_warning_set = false
+		local breed_name = conflict_director._debug_breed or ""
+		if mod.ai_blacklist[breed_name] then
+			if mod:is_in_keep() then
+				mod:set("cs_enable_keep_ai", false)
+			else
+				mod:set("cs_enable_mission_ai", false)
+			end
+			ai_warning_set = true
+		end
+		
 		-- Get position and rotation from the local player
 		local final_rotation
 		local final_position = mod:position_at_cursor(local_player)
@@ -187,7 +201,7 @@ mod.spawn_debug_breed_at_cursor = function(self)
 		end
 
 		-- Get the unit's breed entry
-		local breed = Breeds[conflict_director._debug_breed]
+		local breed = Breeds[breed_name]
 		
 		-- Load this unit if the breed is available
 		if breed then
@@ -200,6 +214,11 @@ mod.spawn_debug_breed_at_cursor = function(self)
 			mod:echo("[Spawn]: Created " .. tostring(conflict_director._debug_breed) .. ".")
 		else
 			mod:echo("[Spawn]: " .. tostring(conflict_director._debug_breed) .. " is not available.")
+		end
+		
+		-- Display AI warning if applicable
+		if ai_warning_set then 
+			mod:echo("[WARNING]: Enabling " .. breed_name .. " AI will likely cause crashes!")
 		end
 	end
 end
@@ -282,6 +301,14 @@ mod.is_in_keep = function(self)
 	if Managers and Managers.state and Managers.state.game_mode then
 		local level_key = Managers.state.game_mode:level_key()
 		return level_key and level_key == "inn_level"
+	end
+end
+
+-- Check if the lobby is currently in the given level
+mod.is_in_level = function(self, level_name)	
+	if Managers and Managers.state and Managers.state.game_mode then
+		local level_key = Managers.state.game_mode:level_key()
+		return level_key and level_key == level_name
 	end
 end
 
@@ -529,6 +556,14 @@ mod:hook(AiBreedSnippets, "reward_boss_kill_loot_die", function (func, unit, ...
 	return pcall(function() return position.z end) and func(unit, ...)
 end)
 
+-- Prevent aggro crash
+mod:hook(AiUtils, "update_aggro", function (func, unit, blackboard, breed, t, dt, ...)
+	if not blackboard.aggro_list then
+		blackboard.aggro_list = {}
+	end
+	return func(unit, blackboard, breed, t, dt, ...)
+end)
+
 -- PREVENT UNIT CRASHES (AKA I hope you like defensive coding) --
 
 -- Prevent Spinemanglr summon crash #1
@@ -575,16 +610,23 @@ end)
 
 -- Prevent Spinemanglr summon crash #5
 mod:hook(BTSpawnAllies, "find_spawn_point", function (func, unit, blackboard, action, data, override_spawn_group, ...)
-	local spawn_group = override_spawn_group or action.optional_go_to_spawn or action.spawn_group
-	local spawner_system = Managers.state.entity:system("spawner_system")
-	local spawners_raw = spawner_system._id_lookup[spawn_group]
+	return (not mod:is_in_keep() and func(unit, blackboard, action, data, override_spawn_group, ...))
+	
+	--local spawn_group = override_spawn_group or action.optional_go_to_spawn or action.spawn_group
+	--local spawner_system = Managers.state.entity:system("spawner_system")
+	--local spawners_raw = spawner_system._id_lookup[spawn_group]
 
-	if not spawners_raw and action.use_fallback_spawners then
-		spawners_raw = spawner_system._enabled_spawners
-	end
+	--if not spawners_raw and action.use_fallback_spawners then
+	--	spawners_raw = spawner_system._enabled_spawners
+	--end
 	
 	-- Use original function if raw spawners exist in this level
-	return spawners_raw and func(unit, blackboard, action, data, override_spawn_group, ...)
+	--return spawners_raw and func(unit, blackboard, action, data, override_spawn_group, ...)
+end)
+
+-- Prevent Drachenfels sorcerer summon crash #1
+mod:hook(Breeds.chaos_exalted_sorcerer_drachenfels, "run_on_spawn", function (func, unit, blackboard, ...)
+	if mod:is_in_level("dlc_castle") then return func(unit, blackboard, ...) end
 end)
 
 -- Prevent keep navigation crash
@@ -605,6 +647,16 @@ end)
 -- Prevent keep navigation crash
 mod:hook(NavigationGroupManager, "a_star_cached_between_positions", function (func, ...)
 	return (not mod:is_in_keep() and func(...)) or false
+end)
+
+-- Prevent keep navigation crash
+mod:hook(LocomotionUtils, "pos_on_mesh", function (func, ...)
+	return (not mod:is_in_keep() and func(...)) or nil
+end)
+
+-- Prevent keep navigation crash
+mod:hook(GwNavQueries, "inside_position_from_outside_position", function (func, ...)
+	return (not mod:is_in_keep() and func(...)) or nil
 end)
 
 -- Prevent keep navigation crash

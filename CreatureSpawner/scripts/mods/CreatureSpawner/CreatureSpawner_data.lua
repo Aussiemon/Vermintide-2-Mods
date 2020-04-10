@@ -31,6 +31,42 @@ mod.unit_category_names = {
 }
 
 mod.unit_categories = {
+	beastmen_bestigor = {
+		"regular",
+		"special",
+	},
+	beastmen_bestigor_dummy = {
+		"dummy",
+		"misc",
+	},
+	beastmen_gor = {
+		"regular",
+	},
+	beastmen_gor_dummy = {
+		"dummy",
+		"misc",
+	},
+	beastmen_minotaur = {
+		"regular",
+		"boss",
+	},
+	beastmen_standard_bearer = {
+		"regular",
+		"special",
+	},
+	beastmen_standard_bearer_crater = {
+		"misc",
+	},
+	beastmen_ungor = {
+		"regular",
+	},
+	beastmen_ungor_dummy = {
+		"dummy",
+		"misc",
+	},
+	beastmen_ungor_archer = {
+		"regular",
+	},
 	chaos_berzerker = {
 		"regular",
 		"special",
@@ -38,6 +74,10 @@ mod.unit_categories = {
 	chaos_corruptor_sorcerer = {
 		"regular",
 		"special",
+	},
+	chaos_dummy_exalted_sorcerer_drachenfels = {
+		"dummy",
+		"misc",
 	},
 	chaos_dummy_sorcerer = {
 		"dummy",
@@ -56,6 +96,9 @@ mod.unit_categories = {
 	chaos_exalted_sorcerer = {
 		"boss",
 	},
+	chaos_exalted_sorcerer_drachenfels = {
+		"boss",
+	},
 	chaos_fanatic = {
 		"regular",
 	},
@@ -67,6 +110,9 @@ mod.unit_categories = {
 	},
 	chaos_marauder_with_shield = {
 		"regular",
+	},
+	chaos_mutator_sorcerer = {
+		"misc",
 	},
 	chaos_plague_sorcerer = {
 		"misc",
@@ -141,6 +187,9 @@ mod.unit_categories = {
 		"dummy",
 		"misc",
 	},
+	skaven_explosive_loot_rat = {
+		"misc",
+	},
 	skaven_grey_seer = {
 		"boss",
 	},
@@ -209,6 +258,10 @@ mod.unit_categories = {
 		"regular",
 		"special",
 	}
+}
+
+mod.ai_blacklist = {
+	chaos_exalted_sorcerer_drachenfels = true
 }
 
 local mod_data = {
