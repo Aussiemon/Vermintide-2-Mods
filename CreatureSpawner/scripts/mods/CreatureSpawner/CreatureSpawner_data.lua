@@ -264,6 +264,13 @@ mod.ai_blacklist = {
 	chaos_exalted_sorcerer_drachenfels = true
 }
 
+mod.hub_levels = {
+	inn_level = true,
+	inn_level_skulls = true,
+	inn_level_celebrate = true,
+	inn_level_halloween = true
+}
+
 local mod_data = {
 	name = "Creature Spawner",               -- Readable mod name
 	description = "Spawn various units in maps that support them.",  -- Mod description

@@ -301,7 +301,7 @@ end
 mod.is_in_keep = function(self)	
 	if Managers and Managers.state and Managers.state.game_mode then
 		local level_key = Managers.state.game_mode:level_key()
-		return level_key and level_key == "inn_level"
+		return level_key and mod.hub_levels[level_key]
 	end
 end
 
