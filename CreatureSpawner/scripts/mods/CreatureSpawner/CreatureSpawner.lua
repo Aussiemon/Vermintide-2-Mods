@@ -551,6 +551,20 @@ mod:hook(AISystem, "update_brains", function (func, ...)
 	end
 end)
 
+-- Lupo fix: Disable groups when AI is disabled
+mod:hook(AIGroupSystem, "update", function(func, self, ...)
+    if mod:get("cs_enable_mission_ai") == false and self.groups_to_initialize then
+        for id, group in pairs(self.groups_to_initialize) do
+            if group.members_n > 0 or group.num_spawned_members > 0 then
+                group.members_n = 0
+                group.num_spawned_members = 0
+            end
+        end
+    end
+    
+    return func(self, ...)
+end)
+
 -- Prevent boss loot die exception on despawn
 mod:hook(AiBreedSnippets, "reward_boss_kill_loot_die", function (func, unit, ...)
 	local position = POSITION_LOOKUP[unit]
@@ -858,7 +872,7 @@ end)
 
 -- Lupo fix: Force the drachenfels boss to be on his last offensive stage
 mod:hook(BTConditions, "transitioned_one_third_health", function(func, ...)
-	return (not mod:is_in_keep() and func(...)) or true
+	return (mod:is_in_level("dlc_castle") and func(...)) or true
 end)
 
 -- Prevent keep navigation crash
