@@ -268,7 +268,8 @@ mod.hub_levels = {
 	inn_level = true,
 	inn_level_skulls = true,
 	inn_level_celebrate = true,
-	inn_level_halloween = true
+	inn_level_halloween = true,
+	inn_level_sonnstill = true
 }
 
 local mod_data = {
