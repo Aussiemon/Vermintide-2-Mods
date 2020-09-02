@@ -3,7 +3,7 @@
 	
 	-----
  
-	Copyright 2019 Aussiemon
+	Copyright 2020 Aussiemon
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -910,6 +910,18 @@ mod:hook(Unit, "create_actor", function (func, self, id, ...)
 	if not mod:is_in_keep() or id ~= -1 then
 		return func(self, id, ...)
 	end
+end)
+
+-- Prevent keep navigation crash
+mod:hook(BTSkulkAroundAction, "get_new_skulk_goal", function (func, self, unit, blackboard, ...)
+	if not mod:is_in_keep() then
+		return func(self, unit, blackboard, ...)
+	end
+	
+	local player = Managers.player:local_player()
+	local player_unit = player.player_unit
+	
+	return player_unit and Unit.local_position(player_unit, 0) or Vector3(0,0,0)
 end)
 
 -- Prevent missing blackboard value crash
