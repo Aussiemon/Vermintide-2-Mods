@@ -566,7 +566,7 @@ mod:hook(AIGroupSystem, "update", function(func, self, ...)
 end)
 
 -- Prevent boss loot die exception on despawn
-mod:hook(AiBreedSnippets, "reward_boss_kill_loot_die", function (func, unit, ...)
+mod:hook(AiBreedSnippets, "reward_boss_kill_loot", function (func, unit, ...)
 	local position = POSITION_LOOKUP[unit]
 	return pcall(function() return position.z end) and func(unit, ...)
 end)
