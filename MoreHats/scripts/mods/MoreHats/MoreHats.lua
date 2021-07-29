@@ -1,9 +1,9 @@
 --[[
-	author: Aussiemon and IAmLupo
+	author: Aussiemon
 	
 	-----
  
-	Copyright 2019 Aussiemon and IAmLupo
+	Copyright 2020 Aussiemon
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -13,7 +13,7 @@
  
 	-----
 	
-	Lets all hats and frames be equippable and unequippable by compatible characters.
+	Lets all hats be equippable and unequippable by compatible characters.
 --]]
 
 local mod = get_mod("MoreHats")
@@ -21,516 +21,123 @@ local mod = get_mod("MoreHats")
 -- ##########################################################
 -- ################## Variables #############################
 
-mod.every_career = {
-	-- Bright Wizard
-	"bw_adept",
-	"bw_scholar",
-	"bw_unchained",
-	
-	-- Wood Elf
-	"we_waywatcher",
-	"we_maidenguard",
-	"we_shade",
-	
-	-- Dwarf Ranger
-	"dr_ranger",
-	"dr_ironbreaker",
-	"dr_slayer",
-	
-	-- Witch Hunter
-	"wh_captain",
-	"wh_bountyhunter",
-	"wh_zealot",
-	
-	-- Empire Soldier
-	"es_mercenary",
-	"es_huntsman",
-	"es_knight"
-}
+mod.career_nodes = {}
+mod.hat_nodes = {}
+mod.equipped_hats = {}
 
-mod.players_nodes = {
-	bw_adept = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = true,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	bw_scholar = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = true,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = false,
-		j_rightcrease_02_anim = true,
-	},
-	bw_unchained = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = true,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	we_shade = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	we_maidenguard = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	we_waywatcher = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	dr_ironbreaker = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	dr_slayer = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	dr_ranger = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	wh_zealot = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	wh_bountyhunter = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	wh_captain = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = true,
-		j_spine2 = true,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = false,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = false,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = false,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = false,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	es_huntsman = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = false,
-		j_spine2 = false,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = true,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = true,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = true,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = true,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	es_knight = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = false,
-		j_spine2 = false,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = true,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = true,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = true,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = true,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	},
-	es_mercenary = {
-		j_upperlipleft2_anim = true,
-		j_upperlipright2_anim = true,
-		j_spine = true,
-		j_shoulder_level = false,
-		j_spine1 = false,
-		j_spine2 = false,
-		j_head = true,
-		j_jaw_anim = true,
-		j_rightcheek_01_anim = true,
-		j_neck = true,
-		j_left_beard_01 = true,
-		j_rightcheek_02_anim = true,
-		j_leftcheek_01_anim = true,
-		j_rightcrease_01_anim = true,
-		j_leftarm = true,
-		j_right_beard_01 = true,
-		j_leftcrease_02_anim = true,
-		j_rightarm = true,
-		j_leftcheek_02_anim = true,
-		j_rightshoulder = true,
-		j_left_beard_02 = true,
-		j_rightcheek_03_anim = true,
-		j_leftshoulder = true,
-		j_leftcrease_01_anim = true,
-		j_leftcheek_03_anim = true,
-		j_right_beard_02 = true,
-		a_hat = true,
-		j_rightcrease_02_anim = true,
-	}
-}
+mod.legacy_enabled = true
 
-local ItemMasterList = ItemMasterList
-local AttachmentUtils = AttachmentUtils
+mod:command("reset_more_hats", nil, function()
+	mod:get_all_hat_nodes()
+	mod:load_careers_and_enable_more_hats()
+end)
+
+mod:command("unequip_all_hats", nil, function()
+	mod:legacy_unequip_all_hats()
+end)
+
+local Application = Application
+local AttachmentNodeLinking = AttachmentNodeLinking
 local BackendUtils = BackendUtils
-local Unit = Unit
-local ScriptUnit = ScriptUnit
+local Cosmetics = Cosmetics
+local ItemMasterList = ItemMasterList
+local Managers = Managers
+local UIWidgetUtils = UIWidgetUtils
 local World = World
-local Matrix4x4Box = Matrix4x4Box
 
-local CosmeticSystem = CosmeticSystem
-local GearUtils = GearUtils
-local HeroWindowCosmeticsInventory = HeroWindowCosmeticsInventory
-local ItemHelper = ItemHelper
-local PlayerUnitAttachmentExtension = PlayerUnitAttachmentExtension
-
+local assert = assert
 local ipairs = ipairs
 local pairs = pairs
 local table = table
+local tostring = tostring
 local type = type
 
 -- ##########################################################
 -- ################## Functions #############################
 
--- Collect all hats and portrait frames for patching
-mod.get_all_hat_and_frames = function(self)
+-- Build a list of unique nodes found in hat items
+mod.get_all_hat_nodes = function(self)
+	mod.hat_nodes = {}
+	
+	for attachment_node_linking_name, attachment_node_linking in pairs(AttachmentNodeLinking) do
+	
+		-- Item is a hat. Collect the attachment nodes for later validation
+		assert(type(attachment_node_linking) == "table")
+		if attachment_node_linking["slot_hat"] then
+			
+			-- Get slot_hat attachment nodes
+			local attachment_nodes = attachment_node_linking["slot_hat"]
+			assert(type(attachment_nodes) == "table")
+				
+			for i, node in ipairs(attachment_nodes) do
+				assert(type(node) == "table")
+				
+				-- Get unique attachment names
+				for location, id in pairs(node) do
+					mod.hat_nodes[id] = (((not (type(id) == "number")) or nil) and id)
+				end
+			end
+		end
+	end
+end
+
+-- ##########################################################
+
+-- Build lists of valid attachment nodes for every career
+mod.populate_career_nodes = function(self)
+	-- Don't populate until every package is loaded
+	mod.loaded_career_count = (mod.loaded_career_count and mod.loaded_career_count + 1) or 1
+	if mod.loaded_career_count < #(mod.every_career) then
+		return
+	end
+	
+	mod.world = mod.world or Managers.world:create_world(mod.world_name, nil, nil, nil, Application.DISABLE_APEX_CLOTH, Application.DISABLE_RENDERING, Application.DISABLE_SOUND)
+	
+	for i, loaded_career_name in ipairs(mod.every_career) do
+		
+		local unit_path = mod.career_unit_directory .. mod.every_career_unit_name[loaded_career_name] .. mod.career_unit_base
+		local test_unit = World.spawn_unit(mod.world, unit_path)
+		
+		-- Check nodes of base third person unit_name
+		mod.career_nodes[loaded_career_name] = {}
+		for node_name, enabled in pairs(mod.hat_nodes) do
+			mod.career_nodes[loaded_career_name][node_name] = Unit.has_node(test_unit, node_name)
+		end
+	end
+	
+	-- Clean up world
+	Managers.world:destroy_world(mod.world)
+	mod.world = nil
+	
+	-- Enable More Hats
+	mod:enable_more_hats()
+end
+
+-- Use vanilla package loader to prepare resources for testing of attachment nodes
+mod.load_careers_and_enable_more_hats = function(self)
+	local sync_loading = false
+	local package_manager = Managers.package
+	mod.loaded_career_count = 0
+	
+	-- Load the packages for every career's base third-person unit
+	for i, career_name in ipairs(mod.every_career) do
+		assert(mod.every_career_unit_name[career_name])
+		
+		local career_package_path = mod.career_unit_directory .. mod.every_career_unit_name[career_name] .. mod.career_unit_base
+		package_manager:load(career_package_path, "MoreHats", callback(self, "populate_career_nodes"), true, true)
+	end
+end
+
+-- ##########################################################
+
+-- Build a list of all hats in the item masterlist and their attachment node linkings
+mod.get_all_hat_attachment_linkings = function(self)
 	local item_list = {
-		hats = {},
-		frames = {}
+		hats = {}
 	}
 	
 	for item_name, item in pairs(ItemMasterList) do
+	
 		-- Item is a hat. Collect the attachment nodes for later validation
 		if item.item_type == "hat" then
 			local hat_template = BackendUtils.get_item_template(item)
@@ -541,26 +148,18 @@ mod.get_all_hat_and_frames = function(self)
 				
 				item_list.hats[item_name] = table.clone(slot_hat)
 			end
-			
-		-- Item is a frame. Store the name for later editing.
-		elseif item.item_type == "frame" then
-			table.insert(item_list.frames, item_name)
 		end
 	end
 	
 	return item_list
 end
 
--- Check if a hat is compatible for a certain character unit
-mod.validate_hats = function(self, character_nodes, hat_nodes)
-	for hat_name, node in pairs(hat_nodes) do
-	
-		-- Unknown nodes found (hats have been updated and may be incompatible)
-		if character_nodes[node.source] == nil then
-			return nil
-		
-		-- Hat is invalid for this character unit
-		elseif character_nodes[node.source] == false then
+-- Validate a hat's nodes are compatible with a career base unit's nodes
+mod.validate_hat = function(self, career_nodes, hat_nodes)
+	for hat_name, hat_node in pairs(hat_nodes) do
+		if type(hat_node.target) == "string" and not career_nodes[hat_node.target] then
+			return false
+		elseif type(hat_node.source) == "string" and not career_nodes[hat_node.source] then
 			return false
 		end
 	end
@@ -569,99 +168,195 @@ mod.validate_hats = function(self, character_nodes, hat_nodes)
 	return true
 end
 
--- Allow compatible characters to wield compatible hats
-mod.patch_hats = function(self, hat_nodes)
-	for item_name, item_nodes in pairs(hat_nodes) do
+-- Modify masterlist to allow compatible careers to wield compatible hats
+mod.patch_masterlist = function(self, all_hat_nodes)
+	for hat_name, hat_nodes in pairs(all_hat_nodes) do
 		local new_can_wield_list = {}
 		
-		-- Find compatible characters and allow them to use the hat
-		for player_name, player_nodes in pairs(mod.players_nodes) do
-			local hat_validation = mod:validate_hats(player_nodes, item_nodes)
-			if hat_validation then
-				table.insert(new_can_wield_list, player_name)
-			elseif hat_validation == nil then
-				mod:echo("New hat types have been added. Unequipping all hats for safety. Please update the MoreHats mod, or risk crashes.")
-				mod:unequip_all_hats()
-				return
+		-- Validate hats against list of careers
+		for career_name, career_nodes in pairs(mod.career_nodes) do
+			if mod:validate_hat(career_nodes, hat_nodes) then
+				table.insert(new_can_wield_list, career_name)
 			end
 		end
 		
-		-- Patch the master item list with the new list of compatible characters
+		-- Patch the item masterlist
 		if #new_can_wield_list > 0 then
-			ItemMasterList[item_name].can_wield = new_can_wield_list
+			ItemMasterList[hat_name].can_wield = new_can_wield_list
 		end
 	end
 end
 
--- Allow compatible characters to wield compatible portrait frames
-mod.patch_frames = function(self, frame_list)
-	for _, item_name in pairs(frame_list) do
-		local new_can_wield_list = mod.every_career
-		ItemMasterList[item_name].can_wield = new_can_wield_list
-	end
-end
-
--- Patch cosmetics to allow use with compatible characters
-mod.patch_cosmetics = function(self)
-
-	mod:pcall(function()
-		local item_list = mod:get_all_hat_and_frames()
-		
-		-- Visit collected hats
-		local hat_nodes = item_list.hats
-		mod:patch_hats(hat_nodes)
-		
-		-- Visit collected frames
-		local frame_list = item_list.frames
-		mod:patch_frames(frame_list)
-	end)
-end
+-- ##########################################################
+-- ############### Legacy Functions #########################
 
 -- Unequip all hats for all characters
-mod.unequip_all_hats = function(self)
+mod.legacy_unequip_all_hats = function(self)
 	mod:pcall(function()
 		for i = 1, #(mod.every_career) do
+			mod:echo("Unequipping hat for " .. mod.every_career[i])
 			local backend_items = Managers.backend:get_interface("items")
 			backend_items:set_loadout_item(nil, mod.every_career[i], "slot_hat")
 		end
 	end)
 end
 
+mod.legacy_prevent_hat_slot_hiding = function(self)
+	local Cosmetics = Cosmetics
+	for key, val in pairs(Cosmetics) do
+		if val and val["always_hide_attachment_slots"] then
+			Cosmetics[key].always_hide_attachment_slots = nil
+		end
+	end
+end
+
+-- ##########################################################
+
+mod.enable_more_hats = function(self)
+	mod:pcall(function()
+		local item_list = mod:get_all_hat_attachment_linkings()
+		local all_hat_nodes = item_list.hats
+		
+		mod:patch_masterlist(all_hat_nodes)
+	end)
+end
+
 -- ##########################################################
 -- #################### Hooks ###############################
 
--- ------------------------------------
--- Allow unequipping hats and frames --
--- ------------------------------------
-
-mod:hook(HeroWindowCosmeticsInventory, "_handle_input", function (func, self, ...)
-	-- Original function
-	func(self, ...)
-	
-	-- Check for unequip press
+mod:hook_origin(HeroWindowCosmeticsInventory, "_handle_input", function (self, dt, t, ...)
+	-- Begin vanilla logic ---------------
+	local widgets_by_name = self._widgets_by_name
+	local parent = self.parent
 	local item_grid = self._item_grid
 	local allow_single_press = false
 	local item, is_equipped = item_grid:is_item_pressed(allow_single_press)
-	
-	if item and is_equipped then
+	local input_service = parent:window_input_service()
+
+	if item_grid:handle_favorite_marking(input_service) then
+		self:_play_sound("play_gui_inventory_item_hover")
+	end
+
+	if item_grid:is_item_hovered() then
+		self:_play_sound("play_gui_inventory_item_hover")
+	end
+	-- End vanilla logic ---------------
+
+	if item then
 		local item_data = item.data
-		local slot_type = item_data.slot_type
+		local item_slot_type = item_data.slot_type
 		
-		-- Unequip selected cosmetic
-		if slot_type == "hat" or slot_type == "frame" then
-			item = {
-				data = {
-					slot_type = slot_type
-				}
-			}
-			
-			local parent = self.parent
+		if not is_equipped then
+			if not mod.legacy_enabled and item_slot_type == "hat" then
+				mod:echo("Fake equipping hat")
+			end
 			parent:_set_loadout_item(item)
-			parent:update_skin_sync()
-			
 			self:_play_sound("play_gui_equipment_equip_hero")
+
+			if item_slot_type == "skin" then
+				parent:update_skin_sync()
+			end
+		else
+			-- Unequip if the pressed item is an equipped hat
+			if item_slot_type == "hat" then
+				if not mod.legacy_enabled then
+					mod:echo("Fake unequipping hat")
+				end
+				
+				item = {
+					data = {
+						slot_type = item_slot_type
+					}
+				}
+				parent:_set_loadout_item(item)
+				self:_play_sound("play_gui_equipment_equip_hero")
+				
+				parent:update_skin_sync()
+			end
 		end
 	end
+
+	-- Begin vanilla code ---------------
+	local item_tabs = widgets_by_name.item_tabs
+
+	UIWidgetUtils.animate_default_icon_tabs(item_tabs, dt)
+
+	local tab_index_hovered = self:_is_inventory_tab_hovered()
+
+	if tab_index_hovered then
+		self:_play_sound("play_gui_inventory_tab_hover")
+	end
+
+	local tab_index_pressed = self:_is_inventory_tab_pressed()
+
+	if tab_index_pressed and tab_index_pressed ~= self._selected_cosmetic_slot_index then
+		parent:set_selected_cosmetic_slot_index(tab_index_pressed)
+		self:_play_sound("play_gui_inventory_tab_click")
+	elseif Managers.input:is_device_active("gamepad") then
+		local input_service = Managers.input:get_service("hero_view")
+		local widget = self._widgets_by_name.item_tabs
+		local widget_content = widget.content
+		local amount = widget_content.amount
+		local current_index = parent._selected_cosmetic_slot_index or 1
+
+		if input_service:get("cycle_previous") and current_index > 1 then
+			parent:set_selected_cosmetic_slot_index(current_index - 1)
+			self:_play_sound("play_gui_cosmetics_selection_click")
+		elseif input_service:get("cycle_next") and current_index < amount then
+			parent:set_selected_cosmetic_slot_index(current_index + 1)
+			self:_play_sound("play_gui_cosmetics_selection_click")
+		end
+	end
+
+	local page_button_next = widgets_by_name.page_button_next
+	local page_button_previous = widgets_by_name.page_button_previous
+
+	UIWidgetUtils.animate_default_button(page_button_next, dt)
+	UIWidgetUtils.animate_default_button(page_button_previous, dt)
+
+	if self:_is_button_hovered(page_button_next) or self:_is_button_hovered(page_button_previous) then
+		self:_play_sound("play_gui_inventory_next_hover")
+	end
+
+	if self:_is_button_pressed(page_button_next) then
+		local next_page_index = self._current_page + 1
+
+		item_grid:set_item_page(next_page_index)
+		self:_play_sound("play_gui_cosmetics_inventory_next_click")
+	elseif self:_is_button_pressed(page_button_previous) then
+		local next_page_index = self._current_page - 1
+
+		item_grid:set_item_page(next_page_index)
+		self:_play_sound("play_gui_cosmetics_inventory_next_click")
+	end
+	-- End vanilla logic ---------------
+end)
+
+-- Intercept hat equip presses in non-legacy mode
+mod:hook(BackendUtils, "set_loadout_item", function (func, backend_id, career_name, slot_name, ...)
+	mod.equipped_hats[career_name] = backend_id
+	--mod:echo("Setting hat item at backend: " .. tostring(backend_id))
+	
+	if not mod.legacy_enabled and slot_name == "slot_hat" then
+		mod:echo("Early return setting hat item")
+		return
+	end
+	
+	return func(backend_id, career_name, slot_name, ...)
+end)
+
+-- Intercept hat equip checks in non-legacy mode
+mod:hook(BackendUtils, "get_loadout_item", function (func, career_name, slot, ...)
+	if not mod.legacy_enabled and slot == "slot_hat" then
+		local backend_items = Managers.backend:get_interface("items")
+		local backend_id = mod.equipped_hats[career_name] or BackendUtils.get_loadout_item_id(career_name, slot)
+		local item = backend_items:get_item_from_id(backend_id)
+		
+		--mod:echo("Getting hat item from backend: " .. tostring(backend_id))
+		return item
+	end
+	
+	return func(career_name, slot, ...)
 end)
 
 -- Return early if backend id is nil
@@ -674,125 +369,17 @@ mod:hook(PlayerUnitAttachmentExtension, "create_attachment_in_slot", function (f
 	return func(self, slot_name, backend_id, ...)
 end)
 
--- Return early if item_name is nil
-mod:hook(ItemHelper, "get_template_by_item_name", function (func, item_name, ...)
-	if not item_name then
-		return {}
+-- Allow "equipping" null hats
+mod:hook(BackendInterfaceItemPlayfab, "set_loadout_item", function (func, self, item_id, career_name, slot_name, ...)
+	if not item_id and slot_name == "slot_hat" then
+		self._backend_mirror:set_character_data(career_name, slot_name, item_id)
+		self._dirty = true
+
+		return true
 	end
 	
 	-- Original function
-	return func(item_name, ...)
-end)
-
--- Set default frame_name if nil
-mod:hook(CosmeticSystem, "set_equipped_frame", function (func, self, unit, frame_name, ...)
-	if not frame_name then
-		frame_name = "default"
-	end
-	
-	-- Original function
-	return func(self, unit, frame_name, ...)
-end)
-
--- ------------------------------------------
--- Support hats with invalid attachment links
--- ------------------------------------------
-
---[[
-"BackendUtils.get_item_template"
-"ItemHelper.get_template_by_item_name"
-"AttachmentUtils.create_attachment"
-"MenuWorldPreviewer.equip_item"
---]]
-
--- ---------------------------------
--- Prevent crashes
--- ---------------------------------
-
--- Prevent attachment crash when a node is missing (a_hat, j_spine2, j_shoulderlevel)
-mod:hook(GearUtils, "link_units", function (func, world, attachment_node_linking, link_table, source, target, ...)
-	local last_source_index = 0
-	local last_target_index = 0
-	
-	for i, attachment_nodes in ipairs(attachment_node_linking) do
-		repeat
-			local source_node = attachment_nodes.source
-			local target_node = attachment_nodes.target
-			
-			local source_node_index = source_node
-			if type(source_node) == "number" then
-				last_source_index = source_node_index
-			elseif type(source_node) == "string" and Unit.has_node(source, source_node) then
-				source_node_index = Unit.node(source, source_node)
-				last_source_index = source_node_index
-			elseif type(source_node) == "string" and not Unit.has_node(source, source_node) then
-				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
-				mod:unequip_all_hats()
-				break
-			end
-			
-			local target_node_index = target_node
-			if type(target_node) == "number" then
-				last_target_index = target_node_index
-			elseif type(target_node) == "string" and Unit.has_node(target, target_node) then
-				target_node_index = Unit.node(target, target_node)
-				last_target_index = target_node_index
-			elseif type(target_node) == "string" and not Unit.has_node(target, target_node) then
-				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
-				mod:unequip_all_hats()
-				break
-			end
-			
-			link_table[#link_table + 1] = {
-				unit = target,
-				i = target_node_index,
-				parent = Unit.scene_graph_parent(target, target_node_index),
-				local_pose = Matrix4x4Box(Unit.local_pose(target, target_node_index))
-			}
-
-			World.link_unit(world, target, target_node_index, source, source_node_index)
-		until true
-	end
-end)
-
-
--- Prevent attachment crash when a node is missing (a_hat, j_spine2, j_shoulderlevel)
-mod:hook(AttachmentUtils, "link", function (func, world, source, target, node_linking, ...)
-	local last_source_index = 0
-	local last_target_index = 0
-	
-	for i, link_data in ipairs(node_linking) do
-		repeat
-			local source_node = link_data.source
-			local target_node = link_data.target
-			
-			local source_node_index = source_node
-			if type(source_node) == "number" then
-				last_source_index = source_node_index
-			elseif type(source_node) == "string" and Unit.has_node(source, source_node) then
-				source_node_index = Unit.node(source, source_node)
-				last_source_index = source_node_index
-			elseif type(source_node) == "string" and not Unit.has_node(source, source_node) then
-				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
-				mod:unequip_all_hats()
-				break
-			end
-			
-			local target_node_index = target_node
-			if type(target_node) == "number" then
-				last_target_index = target_node_index
-			elseif type(target_node) == "string" and Unit.has_node(target, target_node) then
-				target_node_index = Unit.node(target, target_node)
-				last_target_index = target_node_index
-			elseif type(target_node) == "string" and not Unit.has_node(target, target_node) then
-				mod:echo("A character has an invalid item equipped. Unequipping all hats for safety. If this happened while attempting to equip a hat, please update the MoreHats mod.")
-				mod:unequip_all_hats()
-				break
-			end
-
-			World.link_unit(world, target, target_node_index, source, source_node_index)
-		until true
-	end
+	return func(self, item_id, career_name, slot_name, ...)
 end)
 
 -- ##########################################################
@@ -801,16 +388,10 @@ end)
 -- Call when game state changes (e.g. StateLoading -> StateIngame)
 mod.on_game_state_changed = function(status, state)
 	if state == "StateLoading" and status == "exit" then
-		if mod:is_enabled() then
-			mod:patch_cosmetics()
-		end
-	end
-end
-
--- Call when governing settings checkbox is checked
-mod.on_enabled = function(initial_call)
-	if not initial_call then
-		mod:patch_cosmetics()
+		mod:get_all_hat_nodes()
+		mod:load_careers_and_enable_more_hats()
+		--mod:legacy_prevent_hat_slot_hiding()
+		--mod:echo("Initalizing MoreHats...")
 	end
 end
 

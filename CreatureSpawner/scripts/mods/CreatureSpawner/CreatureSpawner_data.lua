@@ -102,6 +102,9 @@ mod.unit_categories = {
 	chaos_fanatic = {
 		"regular",
 	},
+	chaos_greed_pinata = {
+		"misc",
+	},
 	chaos_marauder = {
 		"regular",
 	},
@@ -163,6 +166,9 @@ mod.unit_categories = {
 	},
 	critter_rat = {
 		"regular",
+	},
+	curse_mutator_sorcerer = {
+		"misc",
 	},
 	pet_pig = {
 		"misc",
