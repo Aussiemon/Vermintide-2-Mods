@@ -3,7 +3,7 @@
 	
 	-----
  
-	Copyright 2020 Aussiemon
+	Copyright 2021 Aussiemon
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -13,7 +13,7 @@
  
 	-----
 	
-	This mod lets you spawn various units in maps that support them.
+	This mod allows you to spawn various units in maps that support them.
 --]]
 
 local mod = get_mod("CreatureSpawner")
@@ -22,6 +22,7 @@ local mod = get_mod("CreatureSpawner")
 -- ################## Variables #############################
 
 mod.breed_name_index = mod.breed_name_index or 1
+mod.buff_cap_limit_exceeded = false
 
 mod:command("save_unit", "save selected creature to a slot number <1-3>", function(...) mod.handle_save_unit_slot(...) end)
 mod:command("selected_units", "report selected and saved Creature Spawner creatures", function(...) mod.handle_unit_slots_report(...) end)
@@ -167,6 +168,28 @@ end
 
 -- SPAWN FUNCTIONS --
 
+-- Copy table recursively: http://lua-users.org/wiki/CopyTable
+mod.deepcopy = function(orig, copies)
+    copies = copies or {}
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        if copies[orig] then
+            copy = copies[orig]
+        else
+            copy = {}
+            copies[orig] = copy
+            for orig_key, orig_value in next, orig, nil do
+                copy[mod.deepcopy(orig_key, copies)] = mod.deepcopy(orig_value, copies)
+            end
+            setmetatable(copy, mod.deepcopy(getmetatable(orig), copies))
+        end
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
 -- Spawn breed at raycast position
 mod.spawn_debug_breed_at_cursor = function(self)
 
@@ -202,12 +225,52 @@ mod.spawn_debug_breed_at_cursor = function(self)
 		end
 
 		-- Get the unit's breed entry
-		local breed = Breeds[breed_name]
+		local breed = mod.deepcopy(Breeds[breed_name])
 		
 		-- Load this unit if the breed is available
 		if breed then
 			breed.debug_spawn_optional_data = breed.debug_spawn_optional_data or {}
 			breed.debug_spawn_optional_data.ignore_breed_limits = true
+			breed.debug_spawn_optional_data.enhancements = nil
+			
+			-- Grudge-mark handling
+			local grudge_mark_setting = mod:get("cs_enable_grudge_marked")
+			if grudge_mark_setting then
+				if not mod.buff_cap_limit_exceeded then
+					-- Apply random modifiers
+					if grudge_mark_setting == "RANDOM" then
+						local num_enhancements = mod:get("cs_grudge_marked_random_modifier_count")
+						breed.debug_spawn_optional_data = TerrorEventUtils.add_enhancements_to_spawn_data(breed.debug_spawn_optional_data, num_enhancements, breed_name)
+						
+					-- Apply pre-determined modifiers
+					elseif grudge_mark_setting == "MANUAL" then
+						local enhancement_list = {}
+						
+						for key, value in pairs(BreedEnhancements.boss) do
+							if mod:get("cs_enable_grudge_marked_" .. key) then
+								enhancement_list[key] = true
+							end
+						end
+						breed.debug_spawn_optional_data.enhancements = TerrorEventUtils.generate_enhanced_breed_from_list(enhancement_list)
+					end
+					
+					-- Report on applied modifiers
+					local grudgeString = ""
+					local applied_enhancements = breed.debug_spawn_optional_data.enhancements
+					for key, value in pairs(applied_enhancements) do
+						if grudgeString == "" then
+							grudgeString = type(value) == "table" and tostring(value[1]) or tostring(value)
+						else
+							grudgeString = grudgeString .. ", " .. (type(value) == "table" and tostring(value[1]) or tostring(value))
+						end
+					end
+					if grudgeString ~= "" then
+						mod:echo("Applying " .. grudgeString .. " modifiers...")
+					end
+				else
+					mod:echo("Too many active grudge-mark modifiers!")
+				end
+			end
 			
 			local spawned_unit = conflict_director:spawn_queued_unit(breed, Vector3Box(final_position), QuaternionBox(final_rotation),
 					breed.debug_spawn_category or "debug_spawn", nil, nil, breed.debug_spawn_optional_data)
@@ -457,6 +520,7 @@ mod.handle_despawn_units = function(self)
 	end
 	
 	conflict_director:destroy_all_units()
+	mod.buff_cap_limit_exceeded = false
 	mod:echo("[Spawn]: Removed all enemies.")
 end
 
@@ -958,6 +1022,19 @@ mod:hook(Utility, "get_action_utility", function (func, breed_action, action_nam
 	return func(breed_action, action_name, blackboard, ...)
 end)
 
+-- Prevent server bus cap crash
+mod:hook(BuffSystem, "add_buff", function (func, self, ...)
+	local return_val = func(self, ...)
+	
+	if (self.next_server_buff_id or 0) * 10 >= NetworkConstants.server_controlled_buff_id.max * 5 then
+		mod.buff_cap_limit_exceeded = true
+	else
+		mod.buff_cap_limit_exceeded = false
+	end
+	
+	return return_val
+end)
+
 -- UNIT PACKAGE HOOKS --
 
 -- Prevent all missing unit crashes
@@ -1001,6 +1078,7 @@ mod.on_game_state_changed = function(status, state)
 	else
 		conflict_director._debug_breed = mod:get("cs_selected_unit")
 	end
+	mod.buff_cap_limit_exceeded = false
 end
 
 -- Call when setting is changed in mod settings
