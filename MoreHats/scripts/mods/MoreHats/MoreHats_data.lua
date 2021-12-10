@@ -3,7 +3,7 @@
 	
 	-----
  
-	Copyright 2020 Aussiemon
+	Copyright 2021 Aussiemon
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -44,6 +44,7 @@ mod.every_career = {
 	"wh_captain",
 	"wh_bountyhunter",
 	"wh_zealot",
+	"wh_priest",
 	
 	-- Empire Soldier
 	"es_mercenary",
@@ -74,6 +75,7 @@ mod.every_career_unit_name = {
 	wh_captain = "witch_hunter_captain",
 	wh_bountyhunter = "witch_hunter_bounty_hunter",
 	wh_zealot = "witch_hunter_zealot",
+	wh_priest = "witch_hunter_warrior_priest",
 	
 	-- Empire Soldier
 	es_mercenary = "empire_soldier_mercenary",
@@ -86,6 +88,6 @@ mod.world_name = "more_hats_world"
 
 mod.career_package_directory = "resource_packages/careers/"
 mod.career_unit_directory = "units/beings/player/"
-mod.career_unit_base = "/third_person_base/chr_third_person_base"
+mod.career_unit_base = "/third_person_base/chr_third_person_mesh"
 
 return mod_data

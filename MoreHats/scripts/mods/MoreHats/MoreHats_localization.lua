@@ -1,13 +1,7 @@
 return {
 	mod_description = {
-		en = "MoreHats description"
-	},
-	checkbox_option_name = {
-		en = "Checkbox Option"
-	},
-	checkbox_option_tooltip = {
-		en = "Checkbox Option description."
-	},
+		en = "Makes selected hats equippable by certain heroes, and unequippable by all heroes."
+	}
 --[[
 	some_other_text_id = {
 		en = "Translation",        -- English
