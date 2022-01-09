@@ -256,7 +256,7 @@ mod.spawn_debug_breed_at_cursor = function(self)
 					
 					-- Report on applied modifiers
 					local grudgeString = ""
-					local applied_enhancements = breed.debug_spawn_optional_data.enhancements
+					local applied_enhancements = breed.debug_spawn_optional_data.enhancements or {}
 					for key, value in pairs(applied_enhancements) do
 						if grudgeString == "" then
 							grudgeString = type(value) == "table" and tostring(value[1]) or tostring(value)
