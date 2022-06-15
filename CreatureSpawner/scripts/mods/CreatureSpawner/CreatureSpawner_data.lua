@@ -447,7 +447,7 @@ mod_data.options = {
 					["type"] = "numeric",
 					["tooltip"] = "cs_grudge_marked_random_modifier_count_tooltip",
 					["default_value"] = 1,
-					["range"] = { 0, 10 },
+					["range"] = { 0, 13 },
 					["decimals_number"] = 0
 				},
 				{ -- Enable grudge-marked setting: warping
