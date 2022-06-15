@@ -75,9 +75,6 @@ return {
 	cs_enable_grudge_marked_warping = {
 		en = Localize("display_name_warping")
 	},
-	cs_enable_grudge_marked_intangible = {
-		en = Localize("display_name_intangible")
-	},
 	cs_enable_grudge_marked_unstaggerable = {
 		en = Localize("display_name_unstaggerable")
 	},
@@ -93,6 +90,9 @@ return {
 	cs_enable_grudge_marked_periodic_shield = {
 		en = Localize("display_name_periodic_shield")
 	},
+	cs_enable_grudge_marked_intangible = {
+		en = Localize("display_name_intangible")
+	},
 	cs_enable_grudge_marked_crippling = {
 		en = Localize("display_name_crippling")
 	},
@@ -102,8 +102,14 @@ return {
 	cs_enable_grudge_marked_regenerating = {
 		en = Localize("display_name_regenerating")
 	},
-	cs_enable_grudge_marked_intangible_mirror = {
-		en = Localize("display_name_intangible") .. " Mirror"
+	cs_enable_grudge_marked_periodic_curse = {
+		en = Localize("display_name_periodic_curse")
+	},
+	cs_enable_grudge_marked_commander = {
+		en = Localize("display_name_commander")
+	},
+	cs_enable_grudge_marked_frenzy = {
+		en = Localize("display_name_frenzy")
 	},
 	
 	-- Dropdown Headers
@@ -194,9 +200,6 @@ return {
 	cs_enable_grudge_marked_warping_tooltip = {
 		en = "Toggle grudge-marked modifier " .. Localize("display_name_warping") .. " on / off."
 	},
-	cs_enable_grudge_marked_intangible_tooltip = {
-		en = "Toggle grudge-marked modifier " .. Localize("display_name_intangible") .. " on / off."
-	},
 	cs_enable_grudge_marked_unstaggerable_tooltip = {
 		en = "Toggle grudge-marked modifier " .. Localize("display_name_unstaggerable") .. " on / off."
 	},
@@ -212,6 +215,9 @@ return {
 	cs_enable_grudge_marked_periodic_shield_tooltip = {
 		en = "Toggle grudge-marked modifier " .. Localize("display_name_periodic_shield") .. " on / off."
 	},
+	cs_enable_grudge_marked_intangible_tooltip = {
+		en = "Toggle grudge-marked modifier " .. Localize("display_name_intangible") .. " on / off."
+	},
 	cs_enable_grudge_marked_crippling_tooltip = {
 		en = "Toggle grudge-marked modifier " .. Localize("display_name_crippling") .. " on / off."
 	},
@@ -221,7 +227,13 @@ return {
 	cs_enable_grudge_marked_regenerating_tooltip = {
 		en = "Toggle grudge-marked modifier " .. Localize("display_name_regenerating") .. " on / off."
 	},
-	cs_enable_grudge_marked_intangible_mirror_tooltip = {
-		en = "Toggle grudge-marked modifier " .. Localize("display_name_intangible") .. " Mirror on / off."
+	cs_enable_grudge_marked_periodic_curse_tooltip = {
+		en = "Toggle grudge-marked modifier " .. Localize("display_name_periodic_curse") .. " on / off."
+	},
+	cs_enable_grudge_marked_commander_tooltip = {
+		en = "Toggle grudge-marked modifier " .. Localize("display_name_commander") .. " on / off."
+	},
+	cs_enable_grudge_marked_frenzy_tooltip = {
+		en = "Toggle grudge-marked modifier " .. Localize("display_name_frenzy") .. " on / off."
 	}
 }

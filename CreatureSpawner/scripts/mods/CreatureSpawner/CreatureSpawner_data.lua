@@ -176,6 +176,15 @@ mod.unit_categories = {
 	pet_rat = {
 		"misc",
 	},
+	shadow_lieutenant = {
+		"misc",
+	},
+	shadow_skull = {
+		"misc",
+	},
+	shadow_totem = {
+		"misc",
+	},
 	skaven_clan_rat = {
 		"regular",
 	},
@@ -428,7 +437,7 @@ mod_data.options = {
 			["options"] = {
 				{text = "cs_enable_grudge_marked_header_disabled", value = false},
 				{text = "cs_enable_grudge_marked_header_random", value = "RANDOM", show_widgets = {1}},
-				{text = "cs_enable_grudge_marked_header_manual", value = "MANUAL", show_widgets = {2,3,4,5,6,7,8,9,10,11}}
+				{text = "cs_enable_grudge_marked_header_manual", value = "MANUAL", show_widgets = {2,3,4,5,6,7,8,9,10,11,12,13,14}}
 			},
 			["default_value"] = false, -- Default first option is enabled. In this case false
 			["sub_widgets"] =
@@ -499,6 +508,24 @@ mod_data.options = {
 					["setting_id"] = "cs_enable_grudge_marked_regenerating",
 					["type"] = "checkbox",
 					["tooltip"] = "cs_enable_grudge_marked_regenerating_tooltip",
+					["default_value"] = false -- Default first option is enabled. In this case false
+				},
+				{ -- Enable grudge-marked setting: periodic_curse
+					["setting_id"] = "cs_enable_grudge_marked_periodic_curse",
+					["type"] = "checkbox",
+					["tooltip"] = "cs_enable_grudge_marked_periodic_curse_tooltip",
+					["default_value"] = false -- Default first option is enabled. In this case false
+				},
+				{ -- Enable grudge-marked setting: commander
+					["setting_id"] = "cs_enable_grudge_marked_commander",
+					["type"] = "checkbox",
+					["tooltip"] = "cs_enable_grudge_marked_commander_tooltip",
+					["default_value"] = false -- Default first option is enabled. In this case false
+				},
+				{ -- Enable grudge-marked setting: frenzy
+					["setting_id"] = "cs_enable_grudge_marked_frenzy",
+					["type"] = "checkbox",
+					["tooltip"] = "cs_enable_grudge_marked_frenzy_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				}
 			}
