@@ -225,7 +225,6 @@ end
 -- #################### Hooks ###############################
 
 mod:hook_origin(HeroWindowCosmeticsInventory, "_handle_input", function (self, dt, t, ...)
-	-- Begin vanilla logic ---------------
 	local widgets_by_name = self._widgets_by_name
 	local parent = self.parent
 	local item_grid = self._item_grid
@@ -240,8 +239,8 @@ mod:hook_origin(HeroWindowCosmeticsInventory, "_handle_input", function (self, d
 	if item_grid:is_item_hovered() then
 		self:_play_sound("play_gui_inventory_item_hover")
 	end
-	-- End vanilla logic ---------------
-
+	
+	-- Begin mod code ---------------
 	if item then
 		local item_data = item.data
 		local item_slot_type = item_data.slot_type
@@ -275,8 +274,8 @@ mod:hook_origin(HeroWindowCosmeticsInventory, "_handle_input", function (self, d
 			end
 		end
 	end
-
-	-- Begin vanilla code ---------------
+	-- End mod code ---------------
+	
 	local item_tabs = widgets_by_name.item_tabs
 
 	UIWidgetUtils.animate_default_icon_tabs(item_tabs, dt)
@@ -329,7 +328,79 @@ mod:hook_origin(HeroWindowCosmeticsInventory, "_handle_input", function (self, d
 		item_grid:set_item_page(next_page_index)
 		self:_play_sound("play_gui_cosmetics_inventory_next_click")
 	end
-	-- End vanilla logic ---------------
+end)
+
+-- Console version of hero window cosmetic inventory hook
+mod:hook_origin(HeroWindowCosmeticsLoadoutInventoryConsole, "_handle_input", function (self, dt, t, ...)
+	local widgets_by_name = self._widgets_by_name
+	local parent = self.parent
+	local item_grid = self._item_grid
+	local allow_single_press = false
+	local item, is_equipped = item_grid:is_item_pressed(allow_single_press)
+	local input_service = self:_input_service()
+
+	if item_grid:is_item_hovered() then
+		self:_play_sound("play_gui_inventory_item_hover")
+	end
+
+	if item_grid:handle_favorite_marking(input_service) then
+		self:_play_sound("play_gui_inventory_item_hover")
+	end
+
+	-- Begin mod code ---------------
+	if item then
+		local item_data = item.data
+		local item_slot_type = item_data.slot_type
+		
+		if not is_equipped then
+			if not mod.legacy_enabled and item_slot_type == "hat" then
+				mod:echo("Fake equipping hat")
+			end
+			parent:_set_loadout_item(item)
+			self:_play_sound("play_gui_equipment_equip_hero")
+
+			if item_slot_type == "skin" then
+				parent:update_skin_sync()
+			end
+		else
+			-- Unequip if the pressed item is an equipped hat
+			if item_slot_type == "hat" then
+				if not mod.legacy_enabled then
+					mod:echo("Fake unequipping hat")
+				end
+				
+				item = {
+					data = {
+						slot_type = item_slot_type
+					}
+				}
+				parent:_set_loadout_item(item)
+				self:_play_sound("play_gui_equipment_equip_hero")
+				
+				parent:update_skin_sync()
+			end
+		end
+	end
+	-- End mod code ---------------
+
+	local page_button_next = widgets_by_name.page_button_next
+	local page_button_previous = widgets_by_name.page_button_previous
+
+	if self:_is_button_hovered(page_button_next) or self:_is_button_hovered(page_button_previous) then
+		self:_play_sound("play_gui_inventory_next_hover")
+	end
+
+	if self:_is_button_pressed(page_button_next) then
+		local next_page_index = self._current_page + 1
+
+		item_grid:set_item_page(next_page_index)
+		self:_play_sound("play_gui_equipment_inventory_next_click")
+	elseif self:_is_button_pressed(page_button_previous) then
+		local next_page_index = self._current_page - 1
+
+		item_grid:set_item_page(next_page_index)
+		self:_play_sound("play_gui_equipment_inventory_next_click")
+	end
 end)
 
 -- Intercept hat equip presses in non-legacy mode
