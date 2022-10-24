@@ -167,6 +167,9 @@ mod.unit_categories = {
 	critter_rat = {
 		"regular",
 	},
+	critter_nurgling = {
+		"misc",
+	},
 	curse_mutator_sorcerer = {
 		"misc",
 	},
