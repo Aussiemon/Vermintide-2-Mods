@@ -161,14 +161,14 @@ mod.unit_categories = {
 	chaos_zombie = {
 		"misc",
 	},
+	critter_nurgling = {
+		"misc",
+	},
 	critter_pig = {
 		"regular",
 	},
 	critter_rat = {
 		"regular",
-	},
-	critter_nurgling = {
-		"misc",
 	},
 	curse_mutator_sorcerer = {
 		"misc",
