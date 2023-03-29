@@ -173,6 +173,12 @@ mod.unit_categories = {
 	curse_mutator_sorcerer = {
 		"misc",
 	},
+	ethereal_skeleton_with_hammer = {
+		"misc",
+	},
+	ethereal_skeleton_with_shield = {
+		"misc",
+	},
 	pet_pig = {
 		"misc",
 	},
@@ -275,7 +281,10 @@ mod.unit_categories = {
 	skaven_warpfire_thrower = {
 		"regular",
 		"special",
-	}
+	},
+	tower_homing_skull = {
+		"misc",
+	},
 }
 
 mod.ai_blacklist = {

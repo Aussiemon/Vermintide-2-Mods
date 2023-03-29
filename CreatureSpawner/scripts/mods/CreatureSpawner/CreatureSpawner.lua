@@ -645,6 +645,20 @@ end)
 
 -- PREVENT UNIT CRASHES (AKA I hope you like defensive coding) --
 
+-- Prevent Sofia homing skull summon crash
+mod:hook(ProjectileEtherealSkullLocomotionExtension, "init", function (func, self, extension_init_context, unit, ...)
+	local bb = BLACKBOARDS[unit]
+	if not bb.optional_spawn_data.sofia_unit_pos then
+		local local_player = Managers.player:local_player()
+		if not local_player then
+			bb.optional_spawn_data.sofia_unit_pos = Vector3Box(Vector3.zero())
+		else
+			bb.optional_spawn_data.sofia_unit_pos = Vector3Box((mod:position_at_cursor(local_player) or Vector3.zero()))
+		end
+	end
+	return func(self, extension_init_context, unit, ...)
+end)
+
 -- Prevent Spinemanglr summon crash #1
 mod:hook(BTEnterHooks, "warlord_defensive_on_enter", function (func, unit, blackboard, ...)
 	return blackboard.spawn_allies_positions and func(unit, blackboard, ...)
