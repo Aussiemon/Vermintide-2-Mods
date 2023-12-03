@@ -1,4 +1,4 @@
-# Vermintide 2 Just-Have-Fun Mod Collection
+# Vermintide 2 Mod Collection
 A collection of interesting Vermintide 2 mods I've created, with no particular theme. 
 
 All mods require the Vermintide Mod Framework workshop item to function:
