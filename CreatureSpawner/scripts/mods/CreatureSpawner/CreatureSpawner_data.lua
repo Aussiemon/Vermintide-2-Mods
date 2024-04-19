@@ -71,6 +71,10 @@ mod.unit_categories = {
 		"regular",
 		"special",
 	},
+	chaos_bulwark = {
+		"regular",
+		"special",
+	},
 	chaos_corruptor_sorcerer = {
 		"regular",
 		"special",
@@ -130,6 +134,10 @@ mod.unit_categories = {
 	chaos_raider_tutorial = {
 		"misc",
 	},
+	chaos_skeleton = {
+		"regular",
+		"misc",
+	},
 	chaos_spawn = {
 		"regular",
 		"boss",
@@ -183,6 +191,18 @@ mod.unit_categories = {
 		"misc",
 	},
 	pet_rat = {
+		"misc",
+	},
+	pet_skeleton = {
+		"misc",
+	},
+	pet_skeleton_armored = {
+		"misc",
+	},
+	pet_skeleton_dual_wield = {
+		"misc",
+	},
+	pet_skeleton_with_shield = {
 		"misc",
 	},
 	shadow_lieutenant = {
@@ -283,6 +303,9 @@ mod.unit_categories = {
 		"special",
 	},
 	tower_homing_skull = {
+		"misc",
+	},
+	training_dummy = {
 		"misc",
 	},
 }
