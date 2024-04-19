@@ -246,12 +246,12 @@ mod.spawn_debug_breed_at_cursor = function(self)
 					elseif grudge_mark_setting == "MANUAL" then
 						local enhancement_list = {}
 						
-						for key, value in pairs(BreedEnhancements.boss) do
+						for key, value in pairs(BreedEnhancements) do
 							if mod:get("cs_enable_grudge_marked_" .. key) then
 								enhancement_list[key] = true
 							end
 						end
-						breed.debug_spawn_optional_data.enhancements = TerrorEventUtils.generate_enhanced_breed_from_list(enhancement_list)
+						breed.debug_spawn_optional_data.enhancements = TerrorEventUtils.generate_enhanced_breed_from_set(enhancement_list)
 					end
 					
 					-- Report on applied modifiers
