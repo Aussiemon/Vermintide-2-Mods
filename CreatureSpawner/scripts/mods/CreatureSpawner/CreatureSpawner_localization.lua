@@ -215,16 +215,6 @@ local localization_table = {
 	cs_grudge_marked_random_modifier_count_description = {
 		en = "Choose the desired number of random modifiers to apply to unit spawns."
 	},
-
-	cs_enable_grudge_marked_health = {
-		en = "Increased Health"
-	},
-	cs_enable_grudge_marked_damage = {
-		en = "Increased Damage"
-	},
-	cs_enable_grudge_marked_stagger_resistance = {
-		en = "Increased Stagger Resistance"
-	},
 }
 
 local grudge_mark_toggle_prefixes = {
@@ -236,9 +226,6 @@ local grudge_mark_toggle_suffixes = {
 }
 
 local grudge_mark_toggles = {
-	cs_enable_grudge_marked_health = true,
-	cs_enable_grudge_marked_damage = true,
-	cs_enable_grudge_marked_stagger_resistance = true,
 	cs_enable_grudge_marked_warping = Localize("display_name_warping"),
 	cs_enable_grudge_marked_unstaggerable = Localize("display_name_unstaggerable"),
 	cs_enable_grudge_marked_raging = Localize("display_name_raging"),
@@ -256,12 +243,11 @@ local grudge_mark_toggles = {
 
 -- Create grudge-mark localization keys
 for key, val in pairs(grudge_mark_toggles) do
-	local localized_name = val
 
 	-- Create the localized name if the game provides the localization
-	if type(localized_name) == "string" then
+	if type(val) == "string" then
 		localization_table[key] = localization_table[key] or {}
-		localization_table[key].en = localized_name
+		localization_table[key].en = val
 	end
 
 	-- Create the descriptions from parts, per language
@@ -269,11 +255,10 @@ for key, val in pairs(grudge_mark_toggles) do
 		local description_key = key .. "_description"
 		localization_table[description_key] = localization_table[description_key] or {}
 
-		if type(localized_name) ~= "string" then
-			localized_name = localization_table[key][language] or localization_table[key].en
-		end
-		local prefix = grudge_mark_toggle_prefixes[language] or grudge_mark_toggle_prefixes[language].en
-		local suffix = grudge_mark_toggle_suffixes[language] or grudge_mark_toggle_suffixes[language].en
+		local prefix = grudge_mark_toggle_prefixes[language] or grudge_mark_toggle_prefixes.en or ""
+		local suffix = grudge_mark_toggle_suffixes[language] or grudge_mark_toggle_suffixes.en or ""
+
+		local localized_name = localization_table[key][language] or localization_table[key].en or ""
 		localization_table[description_key][language] = prefix .. " " .. localized_name .. " " .. suffix
 	end
 end
