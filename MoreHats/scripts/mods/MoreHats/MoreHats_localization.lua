@@ -1,4 +1,7 @@
 return {
+	mod_name = {
+		en = "More Hats",
+	},
 	mod_description = {
 		en = "Makes selected hats equippable by certain heroes, and unequippable by all heroes."
 	}
