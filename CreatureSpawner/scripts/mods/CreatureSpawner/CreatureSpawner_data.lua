@@ -1,17 +1,3 @@
---[[
-	author: Aussiemon
-	
-	-----
- 
-	Copyright 2021 Aussiemon
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
---]]
-
 local mod = get_mod("CreatureSpawner")
 
 mod.regular_units = {}
@@ -323,29 +309,18 @@ mod.hub_levels = {
 }
 
 local mod_data = {
-	name = "Creature Spawner",                      -- Readable mod name
-	description = mod:localize("cs_mod_description"),  -- Mod description
-	is_togglable = true,                            -- If the mod can be enabled/disabled
-	is_mutator = false,                             -- If the mod is mutator
-	mutator_settings = {}                           -- Extra settings, if it's mutator
+	name = mod:localize("mod_name"),
+	description = mod:localize("mod_description"),
+	is_togglable = true,
+	localize = false,
+	mutator_settings = {}
 }
 
 mod_data.options = {
-	widgets = { -- Widget settings for the mod options menu
-		-- { -- Selected spawning unit
-			-- ["setting_id"] = "cs_selected_unit",
-			-- ["type"] = "dropdown",
-			-- ["text"] = "Selected Unit",
-			-- ["tooltip"] = "This unit is selected for spawning.",
-			-- ["options"] = {
-				-- {text = "", value = ""},
-			-- },
-			-- ["default_value"] = "skaven_dummy_slave",
-		-- },
+	widgets = {
 		{ -- Selected list of available spawn units
 			["setting_id"] = "cs_unit_list",
 			["type"] = "dropdown",
-			["tooltip"] = "cs_unit_list_tooltip",
 			["options"] = {
 				{text = "cs_unit_list_header_regular", value = "regular_units"},
 				{text = "cs_unit_list_header_dummy", value = "dummy_units"},
@@ -356,13 +331,12 @@ mod_data.options = {
 			},
 			["default_value"] = "regular_units", -- Default first option is enabled. In this case mod.regular_units
 		},
-		
+
 		{ -- Keybind for spawning units
 			["setting_id"] = "cs_spawn_keybind",
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_spawn_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_spawn_unit"
 		},
@@ -371,7 +345,6 @@ mod_data.options = {
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_next_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_next_unit"
 		},
@@ -380,7 +353,6 @@ mod_data.options = {
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_prev_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_previous_unit"
 		},
@@ -389,86 +361,52 @@ mod_data.options = {
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_destroy_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_despawn_units"
 		},
-		
-		-- { -- First slot of saved units
-			-- ["setting_id"] = "cs_saved_unit_one",
-			-- ["type"] = "dropdown",
-			-- ["text"] = "Saved Unit One",
-			-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
-			-- ["options"] = {
-				-- {text = "", value = ""},
-			-- },
-			-- ["default_value"] = "",
+
 		-- },
 		{ -- Keybind to spawn first saved unit
 			["setting_id"] = "cs_spawn_saved_unit_one_keybind",
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_spawn_saved_unit_one_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_spawn_unit_one"
 		},
-		
-		-- { -- Second slot of saved units
-			-- ["setting_id"] = "cs_saved_unit_two",
-			-- ["type"] = "dropdown",
-			-- ["text"] = "Saved Unit Two",
-			-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
-			-- ["options"] = {
-				-- {text = "", value = ""},
-			-- },
-			-- ["default_value"] = "",
+
 		-- },
 		{ -- Keybind to spawn second saved unit
 			["setting_id"] = "cs_spawn_saved_unit_two_keybind",
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_spawn_saved_unit_two_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_spawn_unit_two"
 		},
-		
-		-- { -- Third slot of saved units
-			-- ["setting_id"] = "cs_saved_unit_three",
-			-- ["type"] = "dropdown",
-			-- ["text"] = "Saved Unit Three",
-			-- ["tooltip"] = "This unit can be spawned with the associated keybind.",
-			-- ["options"] = {
-				-- {text = "", value = ""},
-			-- },
-			-- ["default_value"] = "",
+
 		-- },
 		{ -- Keybind to spawn third saved unit
 			["setting_id"] = "cs_spawn_saved_unit_three_keybind",
 			["type"] = "keybind",
 			["keybind_trigger"] = "pressed",
 			["keybind_type"] = "function_call",
-			["tooltip"] = "cs_spawn_saved_unit_three_keybind_tooltip",
 			["default_value"] = {},
 			["function_name"] = "handle_spawn_unit_three"
 		},
 		{ -- Toggle AI in missions
 			["setting_id"] = "cs_enable_mission_ai",
 			["type"] = "checkbox",
-			["tooltip"] = "cs_enable_mission_ai_tooltip",
 			["default_value"] = true -- Default first option is enabled. In this case true
 		},
 		{ -- Toggle AI in Keep
 			["setting_id"] = "cs_enable_keep_ai",
 			["type"] = "checkbox",
-			["tooltip"] = "cs_enable_keep_ai_tooltip",
 			["default_value"] = false -- Default first option is enabled. In this case true
 		},
 		{ -- Grudge-Marked spawning types
 			["setting_id"] = "cs_enable_grudge_marked",
 			["type"] = "dropdown",
-			["tooltip"] = "cs_enable_grudge_marked_tooltip",
 			["options"] = {
 				{text = "cs_enable_grudge_marked_header_disabled", value = false},
 				{text = "cs_enable_grudge_marked_header_random", value = "RANDOM", show_widgets = {1}},
@@ -480,7 +418,6 @@ mod_data.options = {
 				{
 					["setting_id"] = "cs_grudge_marked_random_modifier_count",
 					["type"] = "numeric",
-					["tooltip"] = "cs_grudge_marked_random_modifier_count_tooltip",
 					["default_value"] = 1,
 					["range"] = { 0, 13 },
 					["decimals_number"] = 0
@@ -488,79 +425,66 @@ mod_data.options = {
 				{ -- Enable grudge-marked setting: warping
 					["setting_id"] = "cs_enable_grudge_marked_warping",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_warping_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: intangible
 					["setting_id"] = "cs_enable_grudge_marked_intangible",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_intangible_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: unstaggerable
 					["setting_id"] = "cs_enable_grudge_marked_unstaggerable",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_unstaggerable_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: raging
 					["setting_id"] = "cs_enable_grudge_marked_raging",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_raging_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: vampiric
 					["setting_id"] = "cs_enable_grudge_marked_vampiric",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_vampiric_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: ranged_immune
 					["setting_id"] = "cs_enable_grudge_marked_ranged_immune",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_ranged_immune_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: periodic_shield
 					["setting_id"] = "cs_enable_grudge_marked_periodic_shield",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_periodic_shield_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: crippling
 					["setting_id"] = "cs_enable_grudge_marked_crippling",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_crippling_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: crushing
 					["setting_id"] = "cs_enable_grudge_marked_crushing",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_crushing_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: regenerating
 					["setting_id"] = "cs_enable_grudge_marked_regenerating",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_regenerating_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: periodic_curse
 					["setting_id"] = "cs_enable_grudge_marked_periodic_curse",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_periodic_curse_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: commander
 					["setting_id"] = "cs_enable_grudge_marked_commander",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_commander_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				},
 				{ -- Enable grudge-marked setting: frenzy
 					["setting_id"] = "cs_enable_grudge_marked_frenzy",
 					["type"] = "checkbox",
-					["tooltip"] = "cs_enable_grudge_marked_frenzy_tooltip",
 					["default_value"] = false -- Default first option is enabled. In this case false
 				}
 			}
