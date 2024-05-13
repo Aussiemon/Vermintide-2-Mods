@@ -407,46 +407,19 @@ mod:hook(BackendInterfaceItemPlayfab, "set_loadout_item", function (func, self, 
 end)
 
 -- Disable hat item validation at startup
-mod:hook_origin(PlayFabMirrorAdventure, "set_mechanism", function (self, mechanism_key, ...)
-		self._mechanism_key = mechanism_key
+mod:hook(PlayFabMirrorAdventure, "set_mechanism", function (func, self, ...)
+		local result = func(self, ...)
 
-		if mechanism_key == "versus" then
-			self._characters_data_key = "vs_characters_data"
-			self._verify_slot_keys_per_affiliation = {
-				heroes = {
-					"slot_ranged",
-					"slot_melee",
-					--"slot_hat",
-					"slot_skin",
-					"slot_necklace",
-					"slot_trinket_1",
-					"slot_ring",
-					"slot_frame",
-					"talents",
-				},
-				dark_pact = {
-					"slot_melee",
-					"slot_skin",
-					"slot_frame",
-				},
-				spectators = {},
-			}
-		else
-			self._characters_data_key = "characters_data"
-			self._verify_slot_keys_per_affiliation = {
-				heroes = {
-					"slot_ranged",
-					"slot_melee",
-					--"slot_hat",
-					"slot_skin",
-					"slot_necklace",
-					"slot_trinket_1",
-					"slot_ring",
-					"slot_frame",
-					"talents",
-				},
-			}
+		if self._verify_slot_keys_per_affiliation and self._verify_slot_keys_per_affiliation.heroes then
+			for i = 1, #self._verify_slot_keys_per_affiliation.heroes do
+				if self._verify_slot_keys_per_affiliation.heroes[i] == "slot_hat" then
+					table.remove(self._verify_slot_keys_per_affiliation.heroes, i)
+					break
+				end
+			end
 		end
+
+		return result
 	end
 )
 
