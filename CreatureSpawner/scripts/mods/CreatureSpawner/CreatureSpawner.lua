@@ -1065,12 +1065,6 @@ end)
 mod:hook(EnemyPackageLoader, "request_breed", function (func, self, breed_name, ignore_breed_limits, ...)
 	ignore_breed_limits = true
 	
-	-- Set up breed category for this breed_name
-	if not self._breed_category_lookup[breed_name] then
-		local breed_list = table.clone(mod.all_units)
-		self:_create_breed_category_lookup(breed_list, "creature_spawner", math.huge)
-	end
-	
 	-- Original function
 	local result, replacement_breed_name = func(self, breed_name, ignore_breed_limits, ...)
 	return result, replacement_breed_name
